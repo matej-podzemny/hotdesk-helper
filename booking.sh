@@ -5,7 +5,7 @@
 # 2. Find the ID for the desk/seat you want.
 # 3. Get a fresh Bearer token from your browser's developer tools.
 # ----------------------------------------------------------------
-# Your email
+# Your company email
 EMAIL="PASTE_YOUR_EMAIL_HERE"
 
 # The ID of the seat you want to book
@@ -23,7 +23,6 @@ START_DATE_OFFSET=15
 
 # --- ⭐ WEEKDAY SELECTION - SET WHICH DAYS YOU WANT TO BOOK ⭐ ---
 # Set to 1 for days you want to book, 0 for days you don't want
-# 1=Monday, 2=Tuesday, 3=Wednesday, 4=Thursday, 5=Friday
 BOOK_MONDAY=1      # Monday
 BOOK_TUESDAY=1     # Tuesday  
 BOOK_WEDNESDAY=1   # Wednesday

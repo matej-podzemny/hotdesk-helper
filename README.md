@@ -34,23 +34,27 @@ Open the booking.sh file in your favorite text editor and find the **User Config
 ```sh
 # --- ⚙️ User Configuration ⚙️ ---
 
+# Your company email
+EMAIL="PASTE_YOUR_EMAIL_HERE"
+
 # The ID of the seat you want to book
 SEAT_ID="YOUR_SEAT_ID_HERE"
 
-# Your Bearer token.
+# Your Bearer token
 BEARER_TOKEN="PASTE_YOUR_BEARER_TOKEN_HERE"
 
-# Number of consecutive weekdays to book.
-DAYS_TO_BOOK=30
+# Number of booking weeks to process
+WEEKS_TO_BOOK=30
 
 # Number of days from today to start booking
 START_DATE_OFFSET=15
 ```
 You need to change the following values in the script:
 
+*   **`EMAIL`**: Your company email.
 *   **`SEAT_ID`**: The internal system ID for the desk you want.
 *   **`BEARER_TOKEN`**: A temporary authentication token that proves you are logged in.
-*   **`DAYS_TO_BOOK`** (Optional): How many weekdays to book.
+*   **`WEEKS_TO_BOOK`** (Optional): How many weeks to book.
 *   **`START_DATE_OFFSET`** (Optional): How many days in the future to start booking.
 
 ### How to Find Your `SEAT_ID` and `BEARER_TOKEN`
