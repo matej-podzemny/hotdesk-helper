@@ -129,6 +129,22 @@ echo "Generated JSON Payload:"
 echo "$JSON_PAYLOAD"
 echo "------------------------------------------------"
 
+read -p "Do you want to continue? (y/n): " answer
+
+case "$answer" in
+    [yY]|[yY][eE][sS])
+        echo "Continuing..."
+        ;;
+    [nN]|[nN][oO])
+        echo "Exiting script."
+        exit 0
+        ;;
+    *)
+        echo "Invalid answer. Exiting."
+        exit 1
+        ;;
+esac
+
 # --- Execute the Request ---
 RESPONSE=$(curl -s "https://hotdesk.cat.com/api/CreateBooking/PostSeatBookingMultiDateNew/?locationId=11&sublocationId=26&floorId=4&zoneId=Open%20Space&seatIDs=${SEAT_ID}&emailId=${EMAIL}&reason=null&starttime=08:00AM&endtime=06:00PM" \
   -X POST \
