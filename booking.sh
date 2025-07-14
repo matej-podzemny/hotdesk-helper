@@ -1,20 +1,25 @@
 #!/bin/bash
 # --- ⚙️ User Configuration ⚙️ ---
 # Enter the details for your booking in this section.
-# 1. Find the ID for the desk/seat you want.
-# 2. Get a fresh Bearer token from your browser's developer tools.
+# 1. Put your company email
+# 2. Find the ID for the desk/seat you want.
+# 3. Get a fresh Bearer token from your browser's developer tools.
 # ----------------------------------------------------------------
+# Your email
+EMAIL="PASTE_YOUR_EMAIL_HERE"
+
 # The ID of the seat you want to book
 SEAT_ID="YOUR_SEAT_ID_HERE"
+
 # Your Bearer token. This is a very long string that you must get from
 # a logged-in browser session. It is time-sensitive and will expire.
 BEARER_TOKEN="PASTE_YOUR_BEARER_TOKEN_HERE"
+
 # (Optional) Number of booking weeks to process
 WEEKS_TO_BOOK=1
+
 # (Optional) Number of days from today to start booking (default: 15 days as UI allow only 14 days in advance).
 START_DATE_OFFSET=15
-# Your email
-EMAIL="email@cat.com"
 
 # --- ⭐ WEEKDAY SELECTION - SET WHICH DAYS YOU WANT TO BOOK ⭐ ---
 # Set to 1 for days you want to book, 0 for days you don't want
@@ -31,7 +36,7 @@ BOOK_FRIDAY=0      # Friday (disabled)
 
 # --- Validation ---
 # Check if the user has updated the placeholder variables.
-if [ "$SEAT_ID" == "YOUR_SEAT_ID_HERE" ] || [ "$BEARER_TOKEN" == "PASTE_YOUR_BEARER_TOKEN_HERE" ]; then
+if [ "$SEAT_ID" == "YOUR_SEAT_ID_HERE" ] || [ "$BEARER_TOKEN" == "PASTE_YOUR_BEARER_TOKEN_HERE" ] || [ "$EMAIL" == "PASTE_YOUR_EMAIL_HERE" ] ; then
   echo "🛑 Error: Please configure your details first."
   echo "You must edit the 'User Configuration' section at the top of this script"
   echo "and replace the placeholder values for SEAT_ID and BEARER_TOKEN."
