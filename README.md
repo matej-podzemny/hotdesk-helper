@@ -44,7 +44,7 @@ SEAT_ID="YOUR_SEAT_ID_HERE"
 BEARER_TOKEN="PASTE_YOUR_BEARER_TOKEN_HERE"
 
 # Number of booking weeks to process
-WEEKS_TO_BOOK=30
+WEEKS_TO_BOOK=1
 
 # Number of days from today to start booking
 START_DATE_OFFSET=15
