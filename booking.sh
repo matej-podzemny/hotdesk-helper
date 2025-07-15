@@ -14,23 +14,6 @@ fi
 source "$CONFIG_FILE"
 echo "✅ Configuration loaded from '$CONFIG_FILE'"
 
-# --- 🛡️ Validate Essential Configuration 🛡️ ---
-# Check that the user has replaced the placeholder values for critical variables.
-if [[ "$EMAIL" == "PASTE_YOUR_EMAIL_HERE" || -z "$EMAIL" ]]; then
-    echo "❌ Error: Please set your EMAIL in '$CONFIG_FILE'."
-    exit 1
-fi
-
-if [[ "$SEAT_ID" == "YOUR_SEAT_ID_HERE" || -z "$SEAT_ID" ]]; then
-    echo "❌ Error: Please set your SEAT_ID in '$CONFIG_FILE'."
-    exit 1
-fi
-
-if [[ "$BEARER_TOKEN" == "PASTE_YOUR_BEARER_TOKEN_HERE" || -z "$BEARER_TOKEN" ]]; then
-    echo "❌ Error: Please set your BEARER_TOKEN in '$CONFIG_FILE'."
-    exit 1
-fi
-
 # --- 🔧 Set Defaults & Validate Weekday Configuration 🔧 ---
 # If weekday settings are missing from the config, default them to 0 (don't book).
 # This makes the script more robust.
