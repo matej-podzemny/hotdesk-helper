@@ -29,7 +29,7 @@ chmod +x booking.sh
 
 This is the most important step. You must configure the script before running it.
 
-Open the booking.sh file in your favorite text editor and find the **User Configuration** section at the top.
+Open the config.env file in your favorite text editor and edit the values.
 
 ```sh
 # --- ⚙️ User Configuration ⚙️ ---
@@ -48,6 +48,14 @@ WEEKS_TO_BOOK=1
 
 # Number of days from today to start booking
 START_DATE_OFFSET=15
+
+# --- WEEKDAY SELECTION - SET WHICH DAYS YOU WANT TO BOOK ---
+# Set to 1 for days you want to book, 0 for days you don't want
+BOOK_MONDAY=1      # Monday
+BOOK_TUESDAY=1     # Tuesday  
+BOOK_WEDNESDAY=1   # Wednesday
+BOOK_THURSDAY=0    # Thursday (disabled)
+BOOK_FRIDAY=0      # Friday (disabled)
 ```
 You need to change the following values in the script:
 
