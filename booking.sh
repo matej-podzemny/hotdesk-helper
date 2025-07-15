@@ -42,7 +42,7 @@ BOOK_FRIDAY=${BOOK_FRIDAY:=0}
 
 # --- Validation ---
 # Check if the user has updated the placeholder variables.
-if [ "$SEAT_ID" == "YOUR_SEAT_ID_HERE" ] || [ "$BEARER_TOKEN" == "PASTE_YOUR_BEARER_TOKEN_HERE" ]; then
+if [ "$SEAT_ID" == "YOUR_SEAT_ID_HERE" ] || [ "$BEARER_TOKEN" == "PASTE_YOUR_BEARER_TOKEN_HERE" ] || [ "$EMAIL" == "PASTE_YOUR_EMAIL_HERE" ] ; then
   echo "🛑 Error: Please configure your details first."
   echo "You must edit the 'User Configuration' section at the top of this script"
   echo "and replace the placeholder values for SEAT_ID and BEARER_TOKEN."
