@@ -1,33 +1,44 @@
 #!/bin/bash
-# --- ⚙️ User Configuration ⚙️ ---
-# Enter the details for your booking in this section.
-# 1. Find the ID for the desk/seat you want.
-# 2. Get a fresh Bearer token from your browser's developer tools.
-# ----------------------------------------------------------------
-# The ID of the seat you want to book
-SEAT_ID="YOUR_SEAT_ID_HERE"
-# Your Bearer token. This is a very long string that you must get from
-# a logged-in browser session. It is time-sensitive and will expire.
-BEARER_TOKEN="PASTE_YOUR_BEARER_TOKEN_HERE"
-# (Optional) Number of booking weeks to process
-WEEKS_TO_BOOK=1
-# (Optional) Number of days from today to start booking (default: 15 days as UI allow only 14 days in advance).
-START_DATE_OFFSET=15
-# Your email
-EMAIL="email@cat.com"
 
-# --- ⭐ WEEKDAY SELECTION - SET WHICH DAYS YOU WANT TO BOOK ⭐ ---
-# Set to 1 for days you want to book, 0 for days you don't want
-# 1=Monday, 2=Tuesday, 3=Wednesday, 4=Thursday, 5=Friday
-BOOK_MONDAY=1      # Monday
-BOOK_TUESDAY=1     # Tuesday  
-BOOK_WEDNESDAY=1   # Wednesday
-BOOK_THURSDAY=0    # Thursday (disabled)
-BOOK_FRIDAY=0      # Friday (disabled)
+# --- ⚙️ Load Configuration ⚙️ ---
+CONFIG_FILE="config.env"
 
-# --- End of Configuration ---
-# Do not edit below this line unless you know what you are doing.
-# ----------------------------------------------------------------
+# Check if the configuration file exists
+if [ ! -f "$CONFIG_FILE" ]; then
+    echo "❌ Error: Configuration file not found!"
+    echo "Please create a '$CONFIG_FILE' file in the same directory."
+    exit 1
+fi
+
+# Source the configuration file to load variables
+source "$CONFIG_FILE"
+echo "✅ Configuration loaded from '$CONFIG_FILE'"
+
+# --- 🛡️ Validate Essential Configuration 🛡️ ---
+# Check that the user has replaced the placeholder values for critical variables.
+if [[ "$EMAIL" == "PASTE_YOUR_EMAIL_HERE" || -z "$EMAIL" ]]; then
+    echo "❌ Error: Please set your EMAIL in '$CONFIG_FILE'."
+    exit 1
+fi
+
+if [[ "$SEAT_ID" == "YOUR_SEAT_ID_HERE" || -z "$SEAT_ID" ]]; then
+    echo "❌ Error: Please set your SEAT_ID in '$CONFIG_FILE'."
+    exit 1
+fi
+
+if [[ "$BEARER_TOKEN" == "PASTE_YOUR_BEARER_TOKEN_HERE" || -z "$BEARER_TOKEN" ]]; then
+    echo "❌ Error: Please set your BEARER_TOKEN in '$CONFIG_FILE'."
+    exit 1
+fi
+
+# --- 🔧 Set Defaults & Validate Weekday Configuration 🔧 ---
+# If weekday settings are missing from the config, default them to 0 (don't book).
+# This makes the script more robust.
+BOOK_MONDAY=${BOOK_MONDAY:=0}
+BOOK_TUESDAY=${BOOK_TUESDAY:=0}
+BOOK_WEDNESDAY=${BOOK_WEDNESDAY:=0}
+BOOK_THURSDAY=${BOOK_THURSDAY:=0}
+BOOK_FRIDAY=${BOOK_FRIDAY:=0}
 
 # --- Validation ---
 # Check if the user has updated the placeholder variables.
