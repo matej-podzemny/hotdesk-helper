@@ -89,7 +89,7 @@ Follow these steps to get the required values. You will get both from the same p
         > In the same **Headers** tab, scroll down to the **Request Headers** section. Find the `Bearer` header and **copy the entire long string** of text that follows it.
 
 4.  **Update the Script**
-    *   Paste the values you copied into the `SEAT_ID` and `BEARER_TOKEN` variables at the top of the `book_desk.sh` script.
+    *   Paste the values you copied into the `EMAIL`, `SEAT_ID` and `BEARER_TOKEN` variables at the top of the config file `config.env`.
   
 
 <img width="1906" height="971" alt="screenshot" src="https://github.com/user-attachments/assets/e02f7038-dd24-47c5-aca1-24e6f0900e41" />
@@ -97,7 +97,7 @@ Follow these steps to get the required values. You will get both from the same p
 
 ## Usage
 
-Once you have configured and saved the `booking.sh` file, run it from your terminal (make sure you are inside the `hotdesk-helper` directory):
+Once you have configured and saved the `config.env` file, run the script from your terminal (make sure you are inside the `hotdesk-helper` directory):
 
 ```sh
 ./booking.sh
