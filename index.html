@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotdesk Reservation System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .step {
+            margin-bottom: 40px;
+            padding: 25px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            background: #fafafa;
+        }
+
+        .step h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+        }
+
+        .step-number {
+            background: #4CAF50;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .calendar-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .calendar {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .calendar-header {
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .day-header {
+            background: #f5f5f5;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            color: #666;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .day {
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #eee;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .day:hover {
+            background-color: #e8f5e8;
+        }
+
+        .day.other-month {
+            color: #ccc;
+            background-color: #fafafa;
+        }
+
+        .day.selected {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+
+        .day.today {
+            background-color: #FFD700;
+            color: #333;
+            font-weight: bold;
+            border: 2px solid #FFA000;
+            box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.3);
+        }
+
+        .day.weekend {
+            opacity: 0.3;
+            background-color: #f5f5f5;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        .selected-dates {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f5e8;
+            border-radius: 8px;
+        }
+
+        .selected-dates h4 {
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+
+        .date-tag {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 5px 12px;
+            margin: 3px;
+            border-radius: 15px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .date-tag:hover {
+            background: #45a049;
+        }
+
+        .weekday-selection {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .weekday-checkbox {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .weekday-checkbox:hover {
+            border-color: #4CAF50;
+        }
+
+        .weekday-checkbox.checked {
+            background: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .weekday-checkbox input {
+            margin-right: 8px;
+            width: auto;
+        }
+
+        .date-range-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .status-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status-loading {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4CAF50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .footer {
+            background: #6c757d;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-top: 50px;
+            font-size: 14px;
+        }
+
+        .footer .heart {
+            color: #FFD700;
+            font-size: 16px;
+            margin: 0 5px;
+        }
+
+        @media (max-width: 768px) {
+            .calendar-container {
+                grid-template-columns: 1fr;
+            }
+
+            .weekday-selection {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .date-range-controls {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏢 Hotdesk Reservation System</h1>
+            <p>Configure your credentials and select dates for booking</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Step 1: Configuration -->
+            <div class="step">
+                <h3><span class="step-number">1</span>Configuration</h3>
+
+                <div class="form-group">
+                    <label for="email">Company Email:</label>
+                    <input type="email" id="email" placeholder="your.email@company.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="seatNumber">Select Seat (1-60):</label>
+                    <select id="seatNumber">
+                        <option value="">Choose a seat...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="bearerToken">Bearer Token:</label>
+                    <textarea id="bearerToken" rows="3"
+                        placeholder="Paste your bearer token here (get this from browser developer tools)"></textarea>
+                </div>
+            </div>
+
+            <!-- Step 2: Date Selection -->
+            <div class="step" id="dateSelectionStep">
+                <h3><span class="step-number">2</span>Select Dates</h3>
+
+                <!-- Date Range Controls -->
+                <div class="date-range-controls">
+                    <div class="form-group">
+                        <label for="rangeStartDate">From Date:</label>
+                        <input type="date" id="rangeStartDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="rangeEndDate">To Date:</label>
+                        <input type="date" id="rangeEndDate">
+                    </div>
+                    <div>
+                        <button class="btn btn-secondary btn-small" onclick="selectDateRange()">Select Range</button>
+                    </div>
+                </div>
+
+                <!-- Weekday Quick Selection -->
+                <div class="weekday-selection">
+                    <div class="weekday-checkbox" data-day="1" onclick="toggleWeekdayInRange(1)">
+                        <span>📅 Mondays</span>
+                    </div>
+                    <div class="weekday-checkbox" data-day="2" onclick="toggleWeekdayInRange(2)">
+                        <span>📅 Tuesdays</span>
+                    </div>
+                    <div class="weekday-checkbox" data-day="3" onclick="toggleWeekdayInRange(3)">
+                        <span>📅 Wednesdays</span>
+                    </div>
+                    <div class="weekday-checkbox" data-day="4" onclick="toggleWeekdayInRange(4)">
+                        <span>📅 Thursdays</span>
+                    </div>
+                    <div class="weekday-checkbox" data-day="5" onclick="toggleWeekdayInRange(5)">
+                        <span>📅 Fridays</span>
+                    </div>
+                </div>
+
+                <!-- Calendar -->
+                <div class="calendar-container">
+                    <div class="calendar" id="calendar1">
+                        <div class="calendar-header">
+                            <button class="nav-btn" id="prevMonth1">&lt;</button>
+                            <span id="monthYear1"></span>
+                            <button class="nav-btn" id="nextMonth1">&gt;</button>
+                        </div>
+                        <div class="calendar-grid" id="calendarGrid1"></div>
+                    </div>
+
+                    <div class="calendar" id="calendar2">
+                        <div class="calendar-header">
+                            <button class="nav-btn" id="prevMonth2">&lt;</button>
+                            <span id="monthYear2"></span>
+                            <button class="nav-btn" id="nextMonth2">&gt;</button>
+                        </div>
+                        <div class="calendar-grid" id="calendarGrid2"></div>
+                    </div>
+                </div>
+
+                <div class="selected-dates">
+                    <h4>Selected Dates (<span id="selectedCount">0</span>):</h4>
+                    <div id="selectedDatesDisplay">No dates selected</div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="clearSelectedDates()">Clear Dates</button>
+                    <button class="btn btn-primary" onclick="proceedToBooking()">Proceed to Booking</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Booking Confirmation -->
+            <div class="step hidden" id="bookingStep">
+                <h3><span class="step-number">3</span>Confirm Booking</h3>
+
+                <div id="bookingSummary"></div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="goBackToDateSelection()">Back to Date Selection</button>
+                    <button class="btn btn-primary" onclick="submitBooking()">Book Now</button>
+                </div>
+
+                <div id="bookingStatus" class="status-message"></div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            Created with <span class="heart">💛</span>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let selectedDates = new Set();
+        let currentMonth1 = new Date();
+        let currentMonth2 = new Date();
+
+        // Set second calendar to next month
+        currentMonth2.setMonth(currentMonth2.getMonth() + 1);
+
+        // API Configuration
+        const API_BASE = 'https://hotdesk.cat.com/api';
+
+        // Seat mapping from seat name to seat ID
+        const SEAT_MAPPING = {
+            '1': 8397, '2': 8377, '3': 8357, '4': 8396, '5': 8376,
+            '6': 8356, '7': 8395, '8': 8375, '9': 8355, '10': 8394,
+            '11': 8374, '12': 8354, '13': 8393, '14': 8373, '15': 8353,
+            '16': 8392, '17': 8372, '18': 8352, '19': 8391, '20': 8371,
+            '21': 8351, '22': 8390, '23': 8370, '24': 8350, '25': 8389,
+            '26': 8369, '27': 8349, '28': 8388, '29': 8368, '30': 8348,
+            '31': 8387, '32': 8367, '33': 8347, '34': 8386, '35': 8366,
+            '36': 8346, '37': 8385, '38': 8365, '39': 8345, '40': 8384,
+            '41': 8364, '42': 8344, '43': 8383, '44': 8363, '45': 8343,
+            '46': 8382, '47': 8362, '48': 8342, '49': 8381, '50': 8361,
+            '51': 8341, '52': 8380, '53': 8360, '54': 8340, '55': 8379,
+            '56': 8359, '57': 8339, '58': 8378, '59': 8358, '60': 8338
+        };
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', function () {
+            initializeCalendars();
+            setupDateInputs();
+            populateSeatDropdown();
+            loadSavedData();
+        });
+
+        function populateSeatDropdown() {
+            const seatSelect = document.getElementById('seatNumber');
+
+            // Add all seats from 1 to 60
+            for (let i = 1; i <= 60; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `Seat ${i}`;
+                seatSelect.appendChild(option);
+            }
+        }
+
+        function loadSavedData() {
+            // Load saved email
+            const savedEmail = localStorage.getItem('hotdesk_email');
+            if (savedEmail) {
+                document.getElementById('email').value = savedEmail;
+            }
+
+            // Load saved seat
+            const savedSeat = localStorage.getItem('hotdesk_seat');
+            if (savedSeat) {
+                document.getElementById('seatNumber').value = savedSeat;
+            }
+
+            // Load saved bearer token
+            const savedToken = localStorage.getItem('hotdesk_token');
+            if (savedToken) {
+                document.getElementById('bearerToken').value = savedToken;
+            }
+        }
+
+        function saveUserData() {
+            // Save email
+            const email = document.getElementById('email').value;
+            if (email) {
+                localStorage.setItem('hotdesk_email', email);
+            }
+
+            // Save seat
+            const seat = document.getElementById('seatNumber').value;
+            if (seat) {
+                localStorage.setItem('hotdesk_seat', seat);
+            }
+
+            // Save bearer token
+            const token = document.getElementById('bearerToken').value;
+            if (token) {
+                localStorage.setItem('hotdesk_token', token);
+            }
+        }
+
+        function setupDateInputs() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('rangeStartDate').min = today;
+            document.getElementById('rangeEndDate').min = today;
+
+            // Auto-set end date when start date changes
+            document.getElementById('rangeStartDate').addEventListener('change', function () {
+                const startDate = this.value;
+                document.getElementById('rangeEndDate').min = startDate;
+                if (!document.getElementById('rangeEndDate').value) {
+                    document.getElementById('rangeEndDate').value = startDate;
+                }
+            });
+        }
+
+        function showStatus(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `status-message status-${type}`;
+            element.style.display = 'block';
+
+            if (type === 'loading') {
+                element.innerHTML = '<div class="loading"></div>' + message;
+            }
+        }
+
+        // Calendar functionality
+        function initializeCalendars() {
+            updateCalendar(1);
+            updateCalendar(2);
+
+            document.getElementById('prevMonth1').addEventListener('click', () => navigateMonth(1, -1));
+            document.getElementById('nextMonth1').addEventListener('click', () => navigateMonth(1, 1));
+            document.getElementById('prevMonth2').addEventListener('click', () => navigateMonth(2, -1));
+            document.getElementById('nextMonth2').addEventListener('click', () => navigateMonth(2, 1));
+        }
+
+        function navigateMonth(calendarNum, direction) {
+            if (calendarNum === 1) {
+                currentMonth1.setMonth(currentMonth1.getMonth() + direction);
+                updateCalendar(1);
+            } else {
+                currentMonth2.setMonth(currentMonth2.getMonth() + direction);
+                updateCalendar(2);
+            }
+        }
+
+        function updateCalendar(calendarNum) {
+            const currentMonth = calendarNum === 1 ? currentMonth1 : currentMonth2;
+            const monthYearElement = document.getElementById(`monthYear${calendarNum}`);
+            const calendarGrid = document.getElementById(`calendarGrid${calendarNum}`);
+
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'];
+            monthYearElement.textContent = `${monthNames[currentMonth.getMonth()]} ${currentMonth.getFullYear()}`;
+
+            calendarGrid.innerHTML = '';
+
+            // Add day headers
+            const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            dayHeaders.forEach(day => {
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'day-header';
+                dayHeader.textContent = day;
+                calendarGrid.appendChild(dayHeader);
+            });
+
+            const firstDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+            const lastDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDayOfWeek = firstDay.getDay();
+
+            // Add empty cells for days before the first day
+            for (let i = 0; i < startingDayOfWeek; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'day other-month';
+                // Correct previous month day calculation
+                const prevMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 0); // last day of previous month
+                const prevMonthDay = prevMonth.getDate() - startingDayOfWeek + i + 1;
+                // Create date with correct previous month
+                const prevDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, prevMonthDay);
+                // Create date string without timezone conversion
+                const year = prevDate.getFullYear();
+                const month = String(prevDate.getMonth() + 1).padStart(2, '0');
+                const dayStr = String(prevDate.getDate()).padStart(2, '0');
+                const prevDateString = `${year}-${month}-${dayStr}`;
+                emptyDay.textContent = prevMonthDay;
+                emptyDay.dataset.date = prevDateString;
+                calendarGrid.appendChild(emptyDay);
+            }
+
+            const today = new Date();
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                const currentDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+                // Create date string without timezone conversion
+                const year = currentDate.getFullYear();
+                const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+                const dayStr = String(currentDate.getDate()).padStart(2, '0');
+                const dateString = `${year}-${month}-${dayStr}`;
+
+                dayElement.className = 'day';
+                dayElement.textContent = day;
+                dayElement.dataset.date = dateString;
+
+                // Check if it's today
+                if (currentDate.toDateString() === today.toDateString()) {
+                    dayElement.classList.add('today');
+                }
+
+                // Check if it's selected
+                if (selectedDates.has(dateString)) {
+                    dayElement.classList.add('selected');
+                }
+
+                // Check if it's weekend
+                const dayOfWeek = currentDate.getDay();
+                if (dayOfWeek === 0 || dayOfWeek === 6) {
+                    dayElement.classList.add('weekend');
+                }
+
+                dayElement.addEventListener('click', () => toggleDate(dateString, dayElement));
+                calendarGrid.appendChild(dayElement);
+            }
+
+            // Add days from next month to fill the remaining cells
+            const totalCells = 42; // 6 rows × 7 days
+            const cellsUsed = startingDayOfWeek + daysInMonth;
+            const remainingCells = totalCells - cellsUsed;
+
+            for (let day = 1; day <= remainingCells && remainingCells < 7; day++) {
+                const nextMonthDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, day);
+                // Create date string without timezone conversion
+                const year = nextMonthDate.getFullYear();
+                const month = String(nextMonthDate.getMonth() + 1).padStart(2, '0');
+                const dayStr = String(nextMonthDate.getDate()).padStart(2, '0');
+                const nextDateString = `${year}-${month}-${dayStr}`;
+
+                const dayElement = document.createElement('div');
+                dayElement.className = 'day other-month';
+                dayElement.textContent = day;
+                dayElement.dataset.date = nextDateString;
+
+                calendarGrid.appendChild(dayElement);
+            }
+        }
+
+        function toggleDate(dateString, element) {
+            // Prevent selecting weekends
+            const date = new Date(dateString);
+            const dayOfWeek = date.getDay();
+            if (dayOfWeek === 0 || dayOfWeek === 6) {
+                return; // Don't allow weekend selection
+            }
+
+            if (selectedDates.has(dateString)) {
+                selectedDates.delete(dateString);
+                element.classList.remove('selected');
+            } else {
+                selectedDates.add(dateString);
+                element.classList.add('selected');
+            }
+            updateSelectedDatesDisplay();
+        }
+
+        function selectDateRange() {
+            const startDate = document.getElementById('rangeStartDate').value;
+            const endDate = document.getElementById('rangeEndDate').value;
+
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates');
+                return;
+            }
+
+            // Clear previous selections
+            selectedDates.clear();
+
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            const current = new Date(start);
+
+            while (current <= end) {
+                // Create date string without timezone conversion (same format as calendar)
+                const year = current.getFullYear();
+                const month = String(current.getMonth() + 1).padStart(2, '0');
+                const dayStr = String(current.getDate()).padStart(2, '0');
+                const dateString = `${year}-${month}-${dayStr}`;
+                const dayOfWeek = current.getDay();
+
+                // Only add weekdays (Monday=1 to Friday=5), skip weekends (Sunday=0, Saturday=6)
+                if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+                    selectedDates.add(dateString);
+                }
+
+                current.setDate(current.getDate() + 1);
+            }
+
+            // Clear all previous visual selections and apply new ones
+            const calendar1Grid = document.getElementById('calendarGrid1');
+            const calendar2Grid = document.getElementById('calendarGrid2');
+
+            // Remove all previous selections
+            calendar1Grid.querySelectorAll('.day').forEach(day => {
+                day.classList.remove('selected');
+            });
+            calendar2Grid.querySelectorAll('.day').forEach(day => {
+                day.classList.remove('selected');
+            });
+
+            // Apply new selections
+            calendar1Grid.querySelectorAll('.day').forEach(day => {
+                const dateString = day.dataset.date;
+                if (dateString && selectedDates.has(dateString)) {
+                    day.classList.add('selected');
+                }
+            });
+
+            calendar2Grid.querySelectorAll('.day').forEach(day => {
+                const dateString = day.dataset.date;
+                if (dateString && selectedDates.has(dateString)) {
+                    day.classList.add('selected');
+                }
+            });
+
+            // Clear weekday checkboxes since we're doing a fresh range selection
+            document.querySelectorAll('.weekday-checkbox').forEach(el => el.classList.remove('checked'));
+
+            updateSelectedDatesDisplay();
+        }
+
+        function toggleWeekdayInRange(targetDay) {
+            const startDateValue = document.getElementById('rangeStartDate').value;
+            const endDateValue = document.getElementById('rangeEndDate').value;
+
+            if (!startDateValue || !endDateValue) {
+                alert('Please select date range first');
+                return;
+            }
+
+            const start = new Date(startDateValue);
+            const end = new Date(endDateValue);
+            const current = new Date(start);
+            const weekdayElement = document.querySelector(`[data-day="${targetDay}"]`);
+            const isSelecting = !weekdayElement.classList.contains('checked');
+
+            // Toggle the specific weekday without clearing other selections
+            while (current <= end) {
+                const dayOfWeek = current.getDay();
+                if (dayOfWeek === targetDay) {
+                    // Create date string without timezone conversion (same format as calendar)
+                    const year = current.getFullYear();
+                    const month = String(current.getMonth() + 1).padStart(2, '0');
+                    const dayStr = String(current.getDate()).padStart(2, '0');
+                    const dateString = `${year}-${month}-${dayStr}`;
+                    if (isSelecting) {
+                        selectedDates.add(dateString);
+                    } else {
+                        selectedDates.delete(dateString);
+                    }
+                }
+                current.setDate(current.getDate() + 1);
+            }
+
+            weekdayElement.classList.toggle('checked', isSelecting);
+
+            // Update calendars without rebuilding to prevent navigation issues
+            const calendar1Grid = document.getElementById('calendarGrid1');
+            const calendar2Grid = document.getElementById('calendarGrid2');
+
+            calendar1Grid.querySelectorAll('.day').forEach(day => {
+                const dateString = day.dataset.date;
+                if (dateString && selectedDates.has(dateString)) {
+                    day.classList.add('selected');
+                } else if (dateString && !selectedDates.has(dateString)) {
+                    day.classList.remove('selected');
+                }
+            });
+
+            calendar2Grid.querySelectorAll('.day').forEach(day => {
+                const dateString = day.dataset.date;
+                if (dateString && selectedDates.has(dateString)) {
+                    day.classList.add('selected');
+                } else if (dateString && !selectedDates.has(dateString)) {
+                    day.classList.remove('selected');
+                }
+            });
+
+            updateSelectedDatesDisplay();
+        }
+
+        function updateSelectedDatesDisplay() {
+            const display = document.getElementById('selectedDatesDisplay');
+            const countElement = document.getElementById('selectedCount');
+
+            countElement.textContent = selectedDates.size;
+
+            if (selectedDates.size === 0) {
+                display.innerHTML = 'No dates selected';
+            } else {
+                const sortedDates = Array.from(selectedDates).sort();
+                display.innerHTML = sortedDates.map(date => {
+                    const dateObj = new Date(date);
+                    return `<span class="date-tag" onclick="removeDate('${date}')">${dateObj.toLocaleDateString()} ✕</span>`;
+                }).join('');
+            }
+        }
+
+        function removeDate(dateString) {
+            selectedDates.delete(dateString);
+            updateCalendar(1);
+            updateCalendar(2);
+            updateSelectedDatesDisplay();
+        }
+
+        function clearSelectedDates() {
+            selectedDates.clear();
+            document.querySelectorAll('.weekday-checkbox').forEach(el => el.classList.remove('checked'));
+            updateCalendar(1);
+            updateCalendar(2);
+            updateSelectedDatesDisplay();
+        }
+
+        function proceedToBooking() {
+            if (selectedDates.size === 0) {
+                alert('Please select at least one date');
+                return;
+            }
+
+            const userEmail = document.getElementById('email').value;
+            const bearerToken = document.getElementById('bearerToken').value;
+            const seatNumber = document.getElementById('seatNumber').value;
+
+            if (!userEmail || !bearerToken || !seatNumber) {
+                alert('Please fill in email, seat number, and bearer token');
+                return;
+            }
+
+            // Save user data to localStorage
+            saveUserData();
+
+            const sortedDates = Array.from(selectedDates).sort();
+            const summary = `
+                <h4>Booking Summary:</h4>
+                <p><strong>Email:</strong> ${userEmail}</p>
+                <p><strong>Seat:</strong> Seat ${seatNumber} (ID: ${SEAT_MAPPING[seatNumber]})</p>
+                <p><strong>Selected Dates:</strong> ${selectedDates.size} dates</p>
+                <div style="margin-top: 15px;">
+                    ${sortedDates.map(date => {
+                const dateObj = new Date(date);
+                return `<span class="date-tag">${dateObj.toLocaleDateString()}</span>`;
+            }).join('')}
+                </div>
+            `;
+
+            document.getElementById('bookingSummary').innerHTML = summary;
+            document.getElementById('bookingStep').classList.remove('hidden');
+            document.getElementById('bookingStep').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function goBackToDateSelection() {
+            document.getElementById('bookingStep').classList.add('hidden');
+            document.getElementById('dateSelectionStep').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function submitBooking() {
+            showStatus('bookingStatus', 'Checking existing reservations...', 'loading');
+
+            const userEmail = document.getElementById('email').value;
+            const bearerToken = document.getElementById('bearerToken').value;
+            const seatNumber = document.getElementById('seatNumber').value;
+            const seatId = SEAT_MAPPING[seatNumber];
+
+            try {
+                // First, check for existing reservations
+                const existingReservations = await checkExistingReservations(userEmail, bearerToken);
+
+                if (existingReservations.length > 0) {
+                    // Display existing reservations without allowing continuation
+                    const conflictMessage = `
+                        <div style="background: #f8d7da; border: 1px solid #f5c6cb; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                            <h4 style="color: #721c24; margin-bottom: 10px;">❌ Booking Conflict Detected</h4>
+                            <p style="color: #721c24; margin-bottom: 10px;">You already have reservations that conflict with your selected dates:</p>
+                            ${existingReservations.map((res, index) => {
+                        // The API returns objects like {"Peter.Svoboda@cat.com": "7/21/2025"}
+                        // Get the first (and only) key-value pair from each reservation object
+                        const email = Object.keys(res)[0];
+                        const dateString = res[email];
+                        
+                        // Format the date properly
+                        let formattedDate = dateString;
+                        try {
+                            const date = new Date(dateString);
+                            if (!isNaN(date.getTime())) {
+                                formattedDate = date.toLocaleDateString();
+                            }
+                        } catch (e) {
+                            // Keep original string if parsing fails
+                        }
+                        
+                        return `<div style="margin: 5px 0; padding: 8px; background: rgba(255,255,255,0.8); border-radius: 4px; border-left: 4px solid #dc3545;">
+                                    <strong>Seat ${seatNumber}</strong> - ${formattedDate}
+                                    <div style="font-size: 12px; color: #666; margin-top: 2px;">
+                                        Time: 8:00 AM - 6:00 PM
+                                    </div>
+                                </div>`;
+                    }).join('')}
+                            <div style="margin-top: 15px;">
+                                <button class="btn btn-secondary btn-small" onclick="cancelBooking()">Back to Date Selection</button>
+                            </div>
+                        </div>
+                    `;
+
+                    document.getElementById('bookingStatus').innerHTML = conflictMessage;
+                    document.getElementById('bookingStatus').className = 'status-message status-error';
+                    document.getElementById('bookingStatus').style.display = 'block';
+                    return;
+                }
+
+                // If no existing reservations, show success and proceed with booking
+                showStatus('bookingStatus', '✅ No conflicts detected! Proceeding with booking...', 'success');
+                
+                // Wait a moment to show the success message, then add the booking status
+                setTimeout(async () => {
+                    // Add a new status div for the booking process
+                    const bookingDiv = document.createElement('div');
+                    bookingDiv.id = 'actualBookingStatus';
+                    bookingDiv.className = 'status-message status-loading';
+                    bookingDiv.innerHTML = '<div class="loading"></div>Processing booking request...';
+                    bookingDiv.style.display = 'block';
+                    bookingDiv.style.marginTop = '10px';
+                    
+                    // Insert after the conflict check status
+                    const conflictStatus = document.getElementById('bookingStatus');
+                    conflictStatus.parentNode.insertBefore(bookingDiv, conflictStatus.nextSibling);
+                    
+                    await proceedWithBooking();
+                }, 1500);
+
+            } catch (error) {
+                showStatus('bookingStatus', `Error checking reservations: ${error.message}`, 'error');
+            }
+        }
+
+        async function checkExistingReservations(userEmail, bearerToken) {
+            const seatNumber = document.getElementById('seatNumber').value;
+            const seatId = SEAT_MAPPING[seatNumber];
+
+            // Convert selected dates to the format expected by the API for checking reservations
+            const dateObjects = {};
+            Array.from(selectedDates).forEach(dateStr => {
+                const [year, month, day] = dateStr.split('-');
+                const dateKey = `${month}/${day}/${year} 12:00:00 AM`;
+                dateObjects[dateKey] = dateKey;
+            });
+
+            const jsonPayload = JSON.stringify(dateObjects);
+
+            const response = await fetch(`http://localhost:3000/proxy?url=${encodeURIComponent(API_BASE + '/CreateBooking/CheckSeatAvailabilityBeforeBookingMultiDate/?locationId=11&sublocationId=26&floorId=4&zoneId=Open%20Space&seatIDs=' + seatId + '&starttime=08:00AM&endtime=06:00PM')}`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Bearer': bearerToken,
+                    'Content-Type': 'application/json',
+                    'Origin': 'https://hotdesk.cat.com',
+                    'Referer': 'https://hotdesk.cat.com/create-booking'
+                },
+                body: jsonPayload
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            const result = await response.text();
+
+            try {
+                const onceParsed = JSON.parse(result);
+
+                // If the result is still a string after first parse, parse again
+                parsedResult = typeof onceParsed === 'string' ? JSON.parse(onceParsed) : onceParsed;
+
+                if (Array.isArray(parsedResult)) {
+                    // Filter out empty objects and check if there are actual reservations
+                    const actualReservations = parsedResult.filter(item => {
+                        // Check if object is not empty and has properties other than empty values
+                        if (typeof item === 'object' && item !== null) {
+                            const keys = Object.keys(item);
+                            // Return true if object has keys with meaningful values
+                            return keys.length > 0 && keys.some(key => item[key] && item[key].trim() !== '');
+                        }
+                        return false;
+                    });
+
+                    return actualReservations;
+                }
+
+                return [];
+            } catch (e) {
+                // If it's not JSON, return empty array
+                console.log("ggg");
+                return [];
+            }
+        }
+
+        async function proceedWithBooking() {
+            const userEmail = document.getElementById('email').value;
+            const bearerToken = document.getElementById('bearerToken').value;
+            const seatNumber = document.getElementById('seatNumber').value;
+            const seatId = SEAT_MAPPING[seatNumber];
+
+            try {
+                // Convert selected dates to the format expected by the API
+                const dateObjects = Array.from(selectedDates).map(dateStr => {
+                    const [year, month, day] = dateStr.split('-');
+                    return `"${month}/${day}/${year}":"${month}/${day}/${year}"`;
+                });
+
+                const jsonPayload = `{${dateObjects.join(',')}}`;
+
+                const response = await fetch(`http://localhost:3000/proxy?url=${encodeURIComponent(API_BASE + '/CreateBooking/PostSeatBookingMultiDateNew/?locationId=11&sublocationId=26&floorId=4&zoneId=Open%20Space&seatIDs=' + seatId + '&emailId=' + userEmail + '&reason=null&starttime=08:00AM&endtime=06:00PM')}`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Bearer': bearerToken,
+                        'Content-Type': 'application/json',
+                        'Origin': 'https://hotdesk.cat.com',
+                        'Referer': 'https://hotdesk.cat.com/create-booking'
+                    },
+                    body: jsonPayload
+                });
+
+                const result = await response.text();
+                const bookingStatusDiv = document.getElementById('actualBookingStatus');
+
+                if (result === '"\"\""' || response.ok) {
+                    bookingStatusDiv.className = 'status-message status-success';
+                    bookingStatusDiv.innerHTML = `🎉 Successfully booked seat ${seatNumber} for ${selectedDates.size} dates!`;
+                    
+                    // Start countdown from 10 seconds
+                    let countdown = 10;
+                    const countdownInterval = setInterval(() => {
+                        countdown--;
+                        bookingStatusDiv.innerHTML = `🎉 Successfully booked seat ${seatNumber} for ${selectedDates.size} dates!<br><br>Page will refresh in ${countdown} seconds...`;
+                        
+                        if (countdown <= 0) {
+                            clearInterval(countdownInterval);
+                            // Refresh the page
+                            window.location.reload();
+                        }
+                    }, 1000);
+                } else {
+                    throw new Error(`Booking failed: ${result}`);
+                }
+            } catch (error) {
+                const bookingStatusDiv = document.getElementById('actualBookingStatus');
+                bookingStatusDiv.className = 'status-message status-error';
+                bookingStatusDiv.innerHTML = `Booking failed: ${error.message}`;
+            }
+        }
+
+        function cancelBooking() {
+            document.getElementById('bookingStatus').style.display = 'none';
+            
+            // Also hide the actual booking status if it exists
+            const actualBookingStatus = document.getElementById('actualBookingStatus');
+            if (actualBookingStatus) {
+                actualBookingStatus.remove();
+            }
+            
+            // Go back to date selection step
+            document.getElementById('bookingStep').classList.add('hidden');
+            document.getElementById('dateSelectionStep').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+
+</html>

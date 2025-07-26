@@ -14,26 +14,39 @@ fi
 source "$CONFIG_FILE"
 echo "✅ Configuration loaded from '$CONFIG_FILE'"
 
-# --- 🔧 Set Defaults & Validate Weekday Configuration 🔧 ---
+# --- 🔧 Set Defaults & Validate Configuration 🔧 ---
 # If weekday settings are missing from the config, default them to 0 (don't book).
-# This makes the script more robust.
 BOOK_MONDAY=${BOOK_MONDAY:=0}
 BOOK_TUESDAY=${BOOK_TUESDAY:=0}
 BOOK_WEDNESDAY=${BOOK_WEDNESDAY:=0}
 BOOK_THURSDAY=${BOOK_THURSDAY:=0}
 BOOK_FRIDAY=${BOOK_FRIDAY:=0}
 
+# Set default for USE_DATE_RANGE if not specified
+USE_DATE_RANGE=${USE_DATE_RANGE:=0}
+
 # --- Validation ---
 # Check if the user has updated the placeholder variables.
 if [ "$SEAT_ID" == "YOUR_SEAT_ID_HERE" ] || [ "$BEARER_TOKEN" == "PASTE_YOUR_BEARER_TOKEN_HERE" ] || [ "$EMAIL" == "PASTE_YOUR_EMAIL_HERE" ] ; then
   echo "🛑 Error: Please configure your details first."
-  echo "You must edit the 'User Configuration' section at the top of this script"
-  echo "and replace the placeholder values for SEAT_ID and BEARER_TOKEN."
+  echo "You must edit the 'User Configuration' section in config.env"
+  echo "and replace the placeholder values for SEAT_ID, BEARER_TOKEN, and EMAIL."
   exit 1
 fi
 
+# Validate booking mode configuration
+if [ "$USE_DATE_RANGE" == "1" ]; then
+    if [ -z "$START_DATE" ] || [ -z "$END_DATE" ]; then
+        echo "🛑 Error: When USE_DATE_RANGE=1, both START_DATE and END_DATE must be specified."
+        echo "Please set START_DATE and END_DATE in config.env (format: YYYY-MM-DD)"
+        exit 1
+    fi
+    echo "📅 Using date range mode: $START_DATE to $END_DATE"
+else
+    echo "📅 Using week-based mode: ${WEEKS_TO_BOOK} weeks, starting in ${START_DATE_OFFSET} days"
+fi
+
 echo "Attempting to book Seat ID: ${SEAT_ID}"
-echo "Booking for ${WEEKS_TO_BOOK} weeks, starting in ${START_DATE_OFFSET} days."
 
 # Display selected days
 echo "Selected days to book:"
@@ -71,42 +84,94 @@ should_book_day() {
   return 1
 }
 
+# --- Function to convert date to seconds since epoch ---
+date_to_seconds() {
+  local date_str=$1
+  if [ "$OS_TYPE" == "Darwin" ]; then
+    date -j -f "%Y-%m-%d" "$date_str" "+%s"
+  else
+    date -d "$date_str" "+%s"
+  fi
+}
+
+# --- Function to process date range mode ---
+process_date_range() {
+  local start_seconds=$(date_to_seconds "$START_DATE")
+  local end_seconds=$(date_to_seconds "$END_DATE")
+  local current_seconds=$start_seconds
+  local one_day=86400 # seconds in a day
+  
+  echo "The script will attempt to book the following dates:"
+  
+  while [ "$current_seconds" -le "$end_seconds" ]; do
+    if [ "$OS_TYPE" == "Darwin" ]; then
+      target_date=$(date -r "$current_seconds" "$DATE_FORMAT")
+      day_of_week=$(date -r "$current_seconds" "+%u")
+    else
+      target_date=$(date -d "@$current_seconds" "$DATE_FORMAT")
+      day_of_week=$(date -d "@$current_seconds" "+%u")
+    fi
+    
+    # Check if it's a weekday (1-5) and if we want to book this day
+    if [ "$day_of_week" -ge 1 ] && [ "$day_of_week" -le 5 ]; then
+      if should_book_day "$day_of_week"; then
+        full_date_string="${target_date} 12:00:00 AM"
+        echo "  - $full_date_string"
+        json_parts+=("\"${full_date_string}\":\"${full_date_string}\"")
+      fi
+    fi
+    
+    current_seconds=$((current_seconds + one_day))
+  done
+}
+
+# --- Function to process week-based mode ---
+process_week_based() {
+  local current_date_offset=$START_DATE_OFFSET
+  local weeks_processed=0
+  local days_in_current_week=0
+  
+  echo "The script will attempt to book the following dates:"
+  
+  while [ "$weeks_processed" -lt "$WEEKS_TO_BOOK" ]; do
+    target_date=$($DATE_CMD "+${current_date_offset}d" "$DATE_FORMAT")
+    day_of_week=$($DATE_CMD "+${current_date_offset}d" "+%u") # 1=Mon, 7=Sun
+    
+    # Check if it's a weekday (1-5) and if we want to book this day
+    if [ "$day_of_week" -ge 1 ] && [ "$day_of_week" -le 5 ]; then
+      if should_book_day "$day_of_week"; then
+        full_date_string="${target_date} 12:00:00 AM"
+        echo "  - $full_date_string"
+        json_parts+=("\"${full_date_string}\":\"${full_date_string}\"")
+      fi
+      ((days_in_current_week++))
+    fi
+    
+    # Check if we've finished a week (reached Saturday, day 6)
+    if [ "$day_of_week" -eq 6 ]; then
+      ((weeks_processed++))
+      days_in_current_week=0
+    fi
+    
+    ((current_date_offset++))
+    
+    # Safety check to prevent infinite loops
+    if [ "$current_date_offset" -gt $((START_DATE_OFFSET + 200)) ]; then
+      echo "⚠️  Warning: Stopped processing to prevent infinite loop"
+      break
+    fi
+  done
+}
+
 # --- Date and JSON Payload Generation ---
 json_parts=()
-current_date_offset=$START_DATE_OFFSET
-weeks_processed=0
-days_in_current_week=0
 
-echo "The script will attempt to book the following dates:"
-
-while [ "$weeks_processed" -lt "$WEEKS_TO_BOOK" ]; do
-  target_date=$($DATE_CMD "+${current_date_offset}d" "$DATE_FORMAT")
-  day_of_week=$($DATE_CMD "+${current_date_offset}d" "+%u") # 1=Mon, 7=Sun
-  
-  # Check if it's a weekday (1-5) and if we want to book this day
-  if [ "$day_of_week" -ge 1 ] && [ "$day_of_week" -le 5 ]; then
-    if should_book_day "$day_of_week"; then
-      full_date_string="${target_date} 12:00:00 AM"
-      echo "  - $full_date_string"
-      json_parts+=("\"${full_date_string}\":\"${full_date_string}\"")
-    fi
-    ((days_in_current_week++))
-  fi
-  
-  # Check if we've finished a week (reached Saturday, day 6)
-  if [ "$day_of_week" -eq 6 ]; then
-    ((weeks_processed++))
-    days_in_current_week=0
-  fi
-  
-  ((current_date_offset++))
-  
-  # Safety check to prevent infinite loops
-  if [ "$current_date_offset" -gt $((START_DATE_OFFSET + 200)) ]; then
-    echo "⚠️  Warning: Stopped processing to prevent infinite loop"
-    break
-  fi
-done
+# Choose processing method based on configuration
+if [ "$USE_DATE_RANGE" == "1" ]; then
+  process_date_range
+else
+  process_week_based
+fi
 
 # Check if we have any dates to book
 if [ ${#json_parts[@]} -eq 0 ]; then
