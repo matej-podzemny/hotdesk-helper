@@ -1,6 +1,19 @@
-# Hotdesk Booking Script
+# Hotdesk Helper
 
-This script automates the process of booking a specific desk on the `hotdesk.cat.com` system. It can book a seat for multiple consecutive weekdays, starting from a future date that you specify.
+A comprehensive desk booking solution for the `hotdesk.cat.com` system. This tool provides both a command-line script and a web interface for booking desks efficiently.
+
+## Quick Start
+
+### Option 1: Use the Web Interface
+
+1. **Download and extract** the files to your computer
+2. **Run the application:**
+   - **Windows**: Double-click `start.bat`
+   - **macOS/Linux**: Run `./start.sh` in terminal
+3. **Configure** your details in the web interface
+4. **Select dates** and **book your desk**
+
+### Option 2: Use the Command Line Script
 
 ## Installation and Setup
 
@@ -18,38 +31,63 @@ git clone https://github.com/matej-podzemny/hotdesk-helper.git
 cd hotdesk-helper
 ```
 
-### Step 3: Make the Script Executable
-Before you can run the script, you need to give it "execute" permissions. This only needs to be done once.
+### Step 3: Make Scripts Executable (macOS/Linux only)
 
 ```sh
-chmod +x booking.sh
+chmod +x booking.sh start.sh
 ```
 
 ## Configuration
 
-This is the most important step. You must configure the script before running it.
+This is the most important step for the command-line script. You must configure the script before running it.
 
-Open the config.env file in your favorite text editor and edit the values.
+Open the `config.env` file in your favorite text editor and edit the values.
 
-```sh
+### Required Settings
+
+```bash
 # --- ⚙️ User Configuration ⚙️ ---
 
 # Your company email
-EMAIL="PASTE_YOUR_EMAIL_HERE"
+EMAIL="your.email@company.com"
 
 # The ID of the seat you want to book
 SEAT_ID="YOUR_SEAT_ID_HERE"
 
 # Your Bearer token
 BEARER_TOKEN="PASTE_YOUR_BEARER_TOKEN_HERE"
+```
+
+### Booking Mode Selection
+
+The script supports two booking modes:
+
+#### Mode 0: Week-based Booking (Default)
+```bash
+USE_DATE_RANGE=0
 
 # Number of booking weeks to process
 WEEKS_TO_BOOK=1
 
 # Number of days from today to start booking
 START_DATE_OFFSET=15
+```
 
-# --- WEEKDAY SELECTION - SET WHICH DAYS YOU WANT TO BOOK ---
+#### Mode 1: Specific Date Range
+```bash
+USE_DATE_RANGE=1
+
+# Specify exact start and end dates (YYYY-MM-DD format)
+START_DATE="2025-08-01"
+END_DATE="2025-08-15"
+```
+
+### Weekday Selection
+
+Choose which days of the week to book:
+
+```bash
+# --- ⭐ WEEKDAY SELECTION ⭐ ---
 # Set to 1 for days you want to book, 0 for days you don't want
 BOOK_MONDAY=1      # Monday
 BOOK_TUESDAY=1     # Tuesday  
@@ -57,62 +95,120 @@ BOOK_WEDNESDAY=1   # Wednesday
 BOOK_THURSDAY=0    # Thursday (disabled)
 BOOK_FRIDAY=0      # Friday (disabled)
 ```
-You need to change the following values in the script:
-
-*   **`EMAIL`**: Your company email.
-*   **`SEAT_ID`**: The internal system ID for the desk you want.
-*   **`BEARER_TOKEN`**: A temporary authentication token that proves you are logged in.
-*   **`WEEKS_TO_BOOK`** (Optional): How many weeks to book.
-*   **`START_DATE_OFFSET`** (Optional): How many days in the future to start booking.
-
 ### How to Find Your `SEAT_ID` and `BEARER_TOKEN`
 
-Follow these steps to get the required values. You will get both from the same place.
+You need to extract these values from your browser while logged into the hotdesk system:
 
-1.  **Log In and Open Developer Tools**
-    *   Open your web browser (like Chrome) and log in to `https://hotdesk.cat.com`.
-    *   Open the **Developer Tools** (usually by pressing **F12**, or right-clicking the page and selecting "Inspect").
-    *   Select the **Network** tab.
+1. **Log In and Open Developer Tools**
+   - Open your web browser and log in to `https://hotdesk.cat.com`
+   - Open **Developer Tools** (press **F12** or right-click → "Inspect")
+   - Go to the **Network** tab
 
-2.  **Capture the Booking Request**
-    *   On the website, perform the action to book your desired desk for at least one day.
-    *   Look for a request in the Network log named `PostSeatBookingMultiDateNew` or similar and click on it. This single request contains everything you need.
+2. **Capture the Booking Request**
+   - On the website, book your desired desk for at least one day
+   - In the Network tab, look for a request named `PostSeatBookingMultiDateNew`
+   - Click on this request to view its details
 
-3.  **Find and Copy the Values**
-    *   With the request selected, a new panel will show its details.
-    *   **To get the `SEAT_ID`**:
-        > At the top of the **Headers** tab, find the **Request URL**. Look for the `seatIDs=` part and copy the number that follows. This is your `SEAT_ID`.
-        >
-        > ⚠️ **Important:** This ID is an internal identifier and will **not** match the visible desk number on the floor plan (e.g., 'Desk 20' will have a different ID).
+3. **Extract the Required Values**
+   
+   **For `SEAT_ID`:**
+   - In the **Headers** tab, find the **Request URL**
+   - Look for `seatIDs=` and copy the number that follows
+   - ⚠️ **Important**: This internal ID differs from the visible desk number on the floor plan
+   
+   **For `BEARER_TOKEN`:**
+   - In the **Request Headers** section, find the `Bearer` header
+   - Copy the entire long string that follows it
 
-    *   **To get the `BEARER_TOKEN`**:
-        > In the same **Headers** tab, scroll down to the **Request Headers** section. Find the `Bearer` header and **copy the entire long string** of text that follows it.
+4. **Update Your Configuration**
+   - Paste these values into your `config.env` file
+   - Replace the placeholder values for `EMAIL`, `SEAT_ID`, and `BEARER_TOKEN`
 
-4.  **Update the Script**
-    *   Paste the values you copied into the `EMAIL`, `SEAT_ID` and `BEARER_TOKEN` variables at the top of the config file `config.env`.
-  
-
-<img width="1906" height="971" alt="screenshot" src="https://github.com/user-attachments/assets/e02f7038-dd24-47c5-aca1-24e6f0900e41" />
-
+<img width="1906" height="971" alt="Developer Tools Screenshot" src="https://github.com/user-attachments/assets/e02f7038-dd24-47c5-aca1-24e6f0900e41" />
 
 ## Usage
 
-Once you have configured and saved the `config.env` file, run the script from your terminal (make sure you are inside the `hotdesk-helper` directory):
+### Web Interface (Recommended)
 
-```sh
+**Windows:**
+```cmd
+start.bat
+```
+
+**macOS/Linux:**
+```bash
+./start.sh
+```
+
+The web interface will open automatically in your browser. Simply:
+1. Configure your email, seat, and bearer token
+2. Select your desired dates using the calendar
+3. Click "Book Now" to submit your reservations
+
+### Command Line Script
+
+Once you have configured the `config.env` file, run the script:
+
+```bash
 ./booking.sh
 ```
 
+The script will:
+- Display the dates it plans to book
+- Ask for confirmation
+- Submit the booking requests
+- Show the results
+
 ## Troubleshooting
 
-*   **Error: "Please configure your details first."**: You forgot to replace the placeholder values for `SEAT_ID` or `BEARER_TOKEN` in the script file.
-*   **The script runs but the booking fails**: The most common reason is an expired `BEARER_TOKEN`. They are only valid for a short time. Repeat the steps in the **Configuration** section to get a new token and try again.
-*   **Error: Response shows booking details but says "Something went wrong"**
-    *   If your output looks similar to this:
-        > ```
-        > API Response: [{"SEAT_NAME":"18","LOCATION_NAME":"Slovakia Kosice", ...}]
-        > ℹ️ Something went wrong.
-        > ```
-    *   **Cause:** This typically means that some or all of the dates you tried to book are **already booked**. The API is not creating a new booking; it's simply returning the details of the one that already exists.
-    *   **Why the error?** The script's success check is very simple: it expects a specific empty response (`""`) from the API for a *brand new* booking. When it receives your existing booking data instead, it doesn't match the success condition and therefore reports that something went wrong.
-    *   **Solution:** This is not a critical error. Your desk is already secured for those dates. You can verify this by checking your bookings on the Hotdesk website.
+### Common Issues
+
+**"Please configure your details first"**
+- You forgot to replace placeholder values in `config.env`
+- Make sure `SEAT_ID`, `BEARER_TOKEN`, and `EMAIL` are properly set
+
+**Booking fails / "Something went wrong"**
+- **Most common cause**: Expired `BEARER_TOKEN`  
+  - Tokens are temporary and expire quickly
+  - Get a fresh token from your browser and update `config.env`
+- **Alternative cause**: Dates already booked
+  - Check the API response - it may show existing booking details
+  - Verify your bookings on the website
+
+**"No dates selected for booking"**
+- Check your weekday selection settings (`BOOK_MONDAY`, `BOOK_TUESDAY`, etc.)
+- Ensure at least one day is set to `1`
+- For date range mode, verify `START_DATE` and `END_DATE` are correct
+
+**Port 3000 already in use (Web Interface)**
+- Another application is using port 3000
+- Close other applications or restart your computer
+- The proxy server will show this error on startup
+
+**Web interface won't open**
+- Make sure Python is installed and accessible
+- Check that `proxy_server.py` and `index.html` exist in the directory
+- Try running the start script from the correct directory
+
+### Response Interpretation
+
+**Success Response:**
+```
+API Response: "\"\""
+🎉 SUCCESS: The booking was successful!
+```
+
+**Already Booked Response:**
+```
+API Response: [{"SEAT_NAME":"18","LOCATION_NAME":"Slovakia Kosice", ...}]
+ℹ️ Something went wrong, Response received: [booking details]
+```
+This usually means the dates are already booked. Check the website to confirm your reservations.
+
+### Getting Help
+
+- **Bearer Token Issues**: The token expires frequently. Always get a fresh one when booking fails.
+- **Seat ID Issues**: Remember that the internal seat ID differs from the displayed desk number.
+- **Date Issues**: Ensure your date format is correct (YYYY-MM-DD) and dates are in the future.
+
+For the web interface, check the browser's developer console for any JavaScript errors.
