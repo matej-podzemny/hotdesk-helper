@@ -587,6 +587,7 @@
             setupDateInputs();
             populateSeatDropdown();
             loadSavedData();
+            setupAutoSave();
         });
 
         function populateSeatDropdown() {
@@ -626,19 +627,58 @@
             const email = document.getElementById('email').value;
             if (email) {
                 localStorage.setItem('hotdesk_email', email);
+            } else {
+                localStorage.removeItem('hotdesk_email');
             }
 
             // Save seat
             const seat = document.getElementById('seatNumber').value;
             if (seat) {
                 localStorage.setItem('hotdesk_seat', seat);
+            } else {
+                localStorage.removeItem('hotdesk_seat');
             }
 
             // Save bearer token
             const token = document.getElementById('bearerToken').value;
             if (token) {
                 localStorage.setItem('hotdesk_token', token);
+            } else {
+                localStorage.removeItem('hotdesk_token');
             }
+        }
+
+        function setupAutoSave() {
+            // Auto-save when form fields change
+            const emailField = document.getElementById('email');
+            const seatField = document.getElementById('seatNumber');
+            const tokenField = document.getElementById('bearerToken');
+
+            // Add event listeners for real-time saving
+            emailField.addEventListener('input', saveUserData);
+            emailField.addEventListener('blur', saveUserData);
+            
+            seatField.addEventListener('change', saveUserData);
+            
+            tokenField.addEventListener('input', saveUserData);
+            tokenField.addEventListener('blur', saveUserData);
+
+            // Save data when user tries to leave the page
+            window.addEventListener('beforeunload', function(event) {
+                saveUserData();
+            });
+
+            // Save data when page becomes hidden (e.g., switching tabs)
+            document.addEventListener('visibilitychange', function() {
+                if (document.visibilityState === 'hidden') {
+                    saveUserData();
+                }
+            });
+
+            // Save data when page loses focus
+            window.addEventListener('blur', function() {
+                saveUserData();
+            });
         }
 
         function setupDateInputs() {
