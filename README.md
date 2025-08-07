@@ -60,23 +60,25 @@ BEARER_TOKEN="PASTE_YOUR_BEARER_TOKEN_HERE"
 
 ### Booking Mode Selection
 
-The script supports two booking modes:
+The script automatically chooses between two booking modes based on your configuration:
 
-#### Mode 0: Week-based Booking (Default)
+#### Week-based Booking (Default)
+If `START_DATE` and `END_DATE` are empty, the script uses week-based booking:
 ```bash
-USE_DATE_RANGE=0
-
 # Number of booking weeks to process
 WEEKS_TO_BOOK=1
 
 # Number of days from today to start booking
 START_DATE_OFFSET=15
+
+# Leave these empty for week-based mode
+START_DATE=""
+END_DATE=""
 ```
 
-#### Mode 1: Specific Date Range
+#### Specific Date Range
+If you specify both `START_DATE` and `END_DATE`, the script automatically uses date range mode:
 ```bash
-USE_DATE_RANGE=1
-
 # Specify exact start and end dates (YYYY-MM-DD format)
 START_DATE="2025-08-01"
 END_DATE="2025-08-15"

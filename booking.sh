@@ -22,8 +22,9 @@ BOOK_WEDNESDAY=${BOOK_WEDNESDAY:=0}
 BOOK_THURSDAY=${BOOK_THURSDAY:=0}
 BOOK_FRIDAY=${BOOK_FRIDAY:=0}
 
-# Set default for USE_DATE_RANGE if not specified
-USE_DATE_RANGE=${USE_DATE_RANGE:=0}
+# Set defaults for week-based mode if not specified
+WEEKS_TO_BOOK=${WEEKS_TO_BOOK:=1}
+START_DATE_OFFSET=${START_DATE_OFFSET:=15}
 
 # --- Validation ---
 # Check if the user has updated the placeholder variables.
@@ -34,16 +35,13 @@ if [ "$SEAT_ID" == "YOUR_SEAT_ID_HERE" ] || [ "$BEARER_TOKEN" == "PASTE_YOUR_BEA
   exit 1
 fi
 
-# Validate booking mode configuration
-if [ "$USE_DATE_RANGE" == "1" ]; then
-    if [ -z "$START_DATE" ] || [ -z "$END_DATE" ]; then
-        echo "🛑 Error: When USE_DATE_RANGE=1, both START_DATE and END_DATE must be specified."
-        echo "Please set START_DATE and END_DATE in config.env (format: YYYY-MM-DD)"
-        exit 1
-    fi
+# Automatically determine booking mode based on whether START_DATE and END_DATE are specified
+if [ -n "$START_DATE" ] && [ -n "$END_DATE" ]; then
     echo "📅 Using date range mode: $START_DATE to $END_DATE"
+    USE_DATE_RANGE_MODE=1
 else
     echo "📅 Using week-based mode: ${WEEKS_TO_BOOK} weeks, starting in ${START_DATE_OFFSET} days"
+    USE_DATE_RANGE_MODE=0
 fi
 
 echo "Attempting to book Seat ID: ${SEAT_ID}"
@@ -64,6 +62,9 @@ if [ "$OS_TYPE" == "Darwin" ]; then # macOS
   DATE_CMD="date -v"
   DATE_FORMAT="+%-m/%-d/%Y"
 elif [ "$OS_TYPE" == "Linux" ]; then # GNU/Linux
+  DATE_CMD="date -d"
+  DATE_FORMAT="+%-m/%-d/%Y"
+elif [[ "$OS_TYPE" =~ ^MINGW.*|^MSYS.*|^CYGWIN.* ]]; then # Windows (Git Bash, MSYS2, Cygwin)
   DATE_CMD="date -d"
   DATE_FORMAT="+%-m/%-d/%Y"
 else
@@ -129,13 +130,19 @@ process_date_range() {
 process_week_based() {
   local current_date_offset=$START_DATE_OFFSET
   local weeks_processed=0
-  local days_in_current_week=0
+  local total_days_checked=0
+  local max_days=$((WEEKS_TO_BOOK * 7))  # Total days to check across all weeks
   
   echo "The script will attempt to book the following dates:"
   
-  while [ "$weeks_processed" -lt "$WEEKS_TO_BOOK" ]; do
-    target_date=$($DATE_CMD "+${current_date_offset}d" "$DATE_FORMAT")
-    day_of_week=$($DATE_CMD "+${current_date_offset}d" "+%u") # 1=Mon, 7=Sun
+  while [ "$total_days_checked" -lt "$max_days" ]; do
+    if [ "$OS_TYPE" == "Darwin" ]; then
+      target_date=$(date -v "+${current_date_offset}d" "$DATE_FORMAT")
+      day_of_week=$(date -v "+${current_date_offset}d" "+%u") # 1=Mon, 7=Sun
+    else
+      target_date=$(date -d "+${current_date_offset} days" "$DATE_FORMAT")
+      day_of_week=$(date -d "+${current_date_offset} days" "+%u") # 1=Mon, 7=Sun
+    fi
     
     # Check if it's a weekday (1-5) and if we want to book this day
     if [ "$day_of_week" -ge 1 ] && [ "$day_of_week" -le 5 ]; then
@@ -144,16 +151,10 @@ process_week_based() {
         echo "  - $full_date_string"
         json_parts+=("\"${full_date_string}\":\"${full_date_string}\"")
       fi
-      ((days_in_current_week++))
-    fi
-    
-    # Check if we've finished a week (reached Saturday, day 6)
-    if [ "$day_of_week" -eq 6 ]; then
-      ((weeks_processed++))
-      days_in_current_week=0
     fi
     
     ((current_date_offset++))
+    ((total_days_checked++))
     
     # Safety check to prevent infinite loops
     if [ "$current_date_offset" -gt $((START_DATE_OFFSET + 200)) ]; then
@@ -167,7 +168,7 @@ process_week_based() {
 json_parts=()
 
 # Choose processing method based on configuration
-if [ "$USE_DATE_RANGE" == "1" ]; then
+if [ "$USE_DATE_RANGE_MODE" == "1" ]; then
   process_date_range
 else
   process_week_based
