@@ -233,7 +233,7 @@
 
         .weekday-selection {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(6, 1fr);
             gap: 10px;
             margin-top: 15px;
         }
@@ -247,6 +247,33 @@
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
+        }
+
+        .weekday-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+        }
+
+        .date-range-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .date-range-controls .form-group:last-child {
+            display: flex;
+            align-items: flex-end;
+            padding: 6px;
+        }
+
+        .date-range-controls .form-group:last-child label {
+            display: none;
         }
 
         .weekday-checkbox:hover {
@@ -264,12 +291,12 @@
             width: auto;
         }
 
-        .date-range-controls {
-            display: grid;
-            grid-template-columns: 1fr 1fr auto;
+        .week-selection-controls {
+            display: flex;
             gap: 15px;
-            align-items: center;
             margin-bottom: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
         .action-buttons {
@@ -437,18 +464,18 @@
             <div class="step" id="dateSelectionStep">
                 <h3><span class="step-number">2</span>Select Dates</h3>
 
-                <!-- Date Range Controls -->
+                <!-- Date Range Selection -->
                 <div class="date-range-controls">
                     <div class="form-group">
-                        <label for="rangeStartDate">From Date:</label>
-                        <input type="date" id="rangeStartDate">
+                        <label for="rangeStartDate">Start Date:</label>
+                        <input type="date" id="rangeStartDate" required>
                     </div>
                     <div class="form-group">
-                        <label for="rangeEndDate">To Date:</label>
-                        <input type="date" id="rangeEndDate">
+                        <label for="rangeEndDate">End Date:</label>
+                        <input type="date" id="rangeEndDate" required>
                     </div>
-                    <div>
-                        <button class="btn btn-secondary btn-small" onclick="selectDateRange()">Select Range</button>
+                    <div class="form-group">
+                        <button class="btn btn-secondary btn-small" onclick="clearSelectedDates()">🗑️ Clear All</button>
                     </div>
                 </div>
 
@@ -468,6 +495,9 @@
                     </div>
                     <div class="weekday-checkbox" data-day="5" onclick="toggleWeekdayInRange(5)">
                         <span>📅 Fridays</span>
+                    </div>
+                    <div class="weekday-action">
+                        <button class="btn btn-primary btn-small" onclick="selectWholeWeek()">📅 Select Whole Week (Mon-Fri)</button>
                     </div>
                 </div>
 
@@ -901,6 +931,46 @@
             updateSelectedDatesDisplay();
         }
 
+        function selectWholeWeek() {
+            const startDateValue = document.getElementById('rangeStartDate').value;
+            const endDateValue = document.getElementById('rangeEndDate').value;
+
+            if (!startDateValue || !endDateValue) {
+                alert('Please select date range first');
+                return;
+            }
+
+            const start = new Date(startDateValue);
+            const end = new Date(endDateValue);
+            const current = new Date(start);
+
+            // Select Monday through Friday (1-5) for the entire date range
+            while (current <= end) {
+                const dayOfWeek = current.getDay();
+                if (dayOfWeek >= 1 && dayOfWeek <= 5) { // Monday to Friday
+                    const year = current.getFullYear();
+                    const month = String(current.getMonth() + 1).padStart(2, '0');
+                    const dayStr = String(current.getDate()).padStart(2, '0');
+                    const dateString = `${year}-${month}-${dayStr}`;
+                    selectedDates.add(dateString);
+                }
+                current.setDate(current.getDate() + 1);
+            }
+
+            // Mark all weekday checkboxes as checked
+            document.querySelectorAll('.weekday-checkbox[data-day]').forEach(el => {
+                const day = parseInt(el.dataset.day);
+                if (day >= 1 && day <= 5) {
+                    el.classList.add('checked');
+                }
+            });
+
+            // Update calendars
+            updateCalendar(1);
+            updateCalendar(2);
+            updateSelectedDatesDisplay();
+        }
+
         function updateSelectedDatesDisplay() {
             const display = document.getElementById('selectedDatesDisplay');
             const countElement = document.getElementById('selectedCount');
@@ -973,6 +1043,164 @@
         function goBackToDateSelection() {
             document.getElementById('bookingStep').classList.add('hidden');
             document.getElementById('dateSelectionStep').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // SSL Error Handling Functions
+        async function makeProxyRequest(url, options, retryInsecure = false) {
+            const proxyUrl = retryInsecure 
+                ? `http://localhost:3000/proxy?url=${encodeURIComponent(url)}&insecure=true`
+                : `http://localhost:3000/proxy?url=${encodeURIComponent(url)}`;
+
+            const response = await fetch(proxyUrl, options);
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                let errorData;
+                
+                try {
+                    errorData = JSON.parse(errorText);
+                } catch (e) {
+                    errorData = { error: 'Unknown error', details: errorText };
+                }
+                
+                // Check if it's an SSL certificate error
+                if (response.status === 495 && errorData.error_type === 'ssl_certificate_error') {
+                    throw {
+                        type: 'ssl_error',
+                        data: errorData,
+                        response: response
+                    };
+                }
+                
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            return response;
+        }
+
+        function showSSLErrorDialog(errorData, onRetryInsecure, onCancel) {
+            const dialog = document.createElement('div');
+            dialog.className = 'ssl-error-dialog';
+            dialog.innerHTML = `
+                <div class="ssl-error-overlay">
+                    <div class="ssl-error-content">
+                        <h3>🔒 SSL Certificate Error</h3>
+                        <p><strong>${errorData.error}</strong></p>
+                        <p>${errorData.message}</p>
+                        <div class="ssl-error-details">
+                            <details>
+                                <summary>Technical Details</summary>
+                                <pre>${errorData.details}</pre>
+                            </details>
+                        </div>
+                        <div class="ssl-error-actions">
+                            <button class="btn btn-secondary" onclick="handleSSLCancel(this)">Cancel</button>
+                            <button class="btn btn-primary ssl-warning" onclick="handleSSLRetry(this)">
+                                ⚠️ Continue Anyway (Insecure)
+                            </button>
+                        </div>
+                        <div class="ssl-warning-text">
+                            <small>⚠️ Warning: Continuing will disable SSL certificate verification for this request only.</small>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add CSS for the dialog
+            if (!document.querySelector('#ssl-error-styles')) {
+                const styles = document.createElement('style');
+                styles.id = 'ssl-error-styles';
+                styles.textContent = `
+                    .ssl-error-dialog {
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        z-index: 10000;
+                    }
+                    .ssl-error-overlay {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(0, 0, 0, 0.5);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                    .ssl-error-content {
+                        background: white;
+                        padding: 30px;
+                        border-radius: 10px;
+                        max-width: 500px;
+                        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+                    }
+                    .ssl-error-content h3 {
+                        margin-top: 0;
+                        color: #dc3545;
+                    }
+                    .ssl-error-details {
+                        margin: 15px 0;
+                    }
+                    .ssl-error-details details {
+                        background: #f8f9fa;
+                        border: 1px solid #dee2e6;
+                        border-radius: 5px;
+                        padding: 10px;
+                    }
+                    .ssl-error-details pre {
+                        margin: 0;
+                        white-space: pre-wrap;
+                        font-size: 12px;
+                        max-height: 100px;
+                        overflow-y: auto;
+                    }
+                    .ssl-error-actions {
+                        display: flex;
+                        gap: 15px;
+                        justify-content: flex-end;
+                        margin-top: 20px;
+                    }
+                    .ssl-warning {
+                        background: #ffc107 !important;
+                        color: #000 !important;
+                    }
+                    .ssl-warning:hover {
+                        background: #e0a800 !important;
+                    }
+                    .ssl-warning-text {
+                        margin-top: 10px;
+                        text-align: center;
+                        color: #dc3545;
+                    }
+                `;
+                document.head.appendChild(styles);
+            }
+            
+            // Store the callbacks
+            dialog._onRetryInsecure = onRetryInsecure;
+            dialog._onCancel = onCancel;
+            
+            document.body.appendChild(dialog);
+            return dialog;
+        }
+
+        function handleSSLRetry(button) {
+            const dialog = button.closest('.ssl-error-dialog');
+            if (dialog && dialog._onRetryInsecure) {
+                dialog._onRetryInsecure();
+            }
+            document.body.removeChild(dialog);
+        }
+
+        function handleSSLCancel(button) {
+            const dialog = button.closest('.ssl-error-dialog');
+            if (dialog && dialog._onCancel) {
+                dialog._onCancel();
+            }
+            document.body.removeChild(dialog);
         }
 
         async function submitBooking() {
@@ -1054,7 +1282,7 @@
             }
         }
 
-        async function checkExistingReservations(userEmail, bearerToken) {
+        async function checkExistingReservations(userEmail, bearerToken, retryInsecure = false) {
             const seatNumber = document.getElementById('seatNumber').value;
             const seatId = SEAT_MAPPING[seatNumber];
 
@@ -1067,55 +1295,77 @@
             });
 
             const jsonPayload = JSON.stringify(dateObjects);
-
-            const response = await fetch(`http://localhost:3000/proxy?url=${encodeURIComponent(API_BASE + '/CreateBooking/CheckSeatAvailabilityBeforeBookingMultiDate/?locationId=11&sublocationId=26&floorId=4&zoneId=Open%20Space&seatIDs=' + seatId + '&starttime=08:00AM&endtime=06:00PM')}`, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Bearer': bearerToken,
-                    'Content-Type': 'application/json',
-                    'Origin': 'https://hotdesk.cat.com',
-                    'Referer': 'https://hotdesk.cat.com/create-booking'
-                },
-                body: jsonPayload
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-            }
-
-            const result = await response.text();
+            const targetUrl = API_BASE + '/CreateBooking/CheckSeatAvailabilityBeforeBookingMultiDate/?locationId=11&sublocationId=26&floorId=4&zoneId=Open%20Space&seatIDs=' + seatId + '&starttime=08:00AM&endtime=06:00PM';
 
             try {
-                const onceParsed = JSON.parse(result);
+                const response = await makeProxyRequest(targetUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Bearer': bearerToken,
+                        'Content-Type': 'application/json',
+                        'Origin': 'https://hotdesk.cat.com',
+                        'Referer': 'https://hotdesk.cat.com/create-booking'
+                    },
+                    body: jsonPayload
+                }, retryInsecure);
 
-                // If the result is still a string after first parse, parse again
-                parsedResult = typeof onceParsed === 'string' ? JSON.parse(onceParsed) : onceParsed;
+                const result = await response.text();
 
-                if (Array.isArray(parsedResult)) {
-                    // Filter out empty objects and check if there are actual reservations
-                    const actualReservations = parsedResult.filter(item => {
-                        // Check if object is not empty and has properties other than empty values
-                        if (typeof item === 'object' && item !== null) {
-                            const keys = Object.keys(item);
-                            // Return true if object has keys with meaningful values
-                            return keys.length > 0 && keys.some(key => item[key] && item[key].trim() !== '');
-                        }
-                        return false;
-                    });
+                try {
+                    const onceParsed = JSON.parse(result);
 
-                    return actualReservations;
+                    // If the result is still a string after first parse, parse again
+                    parsedResult = typeof onceParsed === 'string' ? JSON.parse(onceParsed) : onceParsed;
+
+                    if (Array.isArray(parsedResult)) {
+                        // Filter out empty objects and check if there are actual reservations
+                        const actualReservations = parsedResult.filter(item => {
+                            // Check if object is not empty and has properties other than empty values
+                            if (typeof item === 'object' && item !== null) {
+                                const keys = Object.keys(item);
+                                // Return true if object has keys with meaningful values
+                                return keys.length > 0 && keys.some(key => item[key] && item[key].trim() !== '');
+                            }
+                            return false;
+                        });
+
+                        return actualReservations;
+                    }
+
+                    return [];
+                } catch (e) {
+                    // If it's not JSON, return empty array
+                    console.log("Failed to parse response as JSON");
+                    return [];
                 }
-
-                return [];
-            } catch (e) {
-                // If it's not JSON, return empty array
-                console.log("ggg");
-                return [];
+            } catch (error) {
+                if (error.type === 'ssl_error') {
+                    // Show SSL error dialog and wait for user choice
+                    return new Promise((resolve, reject) => {
+                        showSSLErrorDialog(
+                            error.data,
+                            // Retry with insecure mode
+                            async () => {
+                                try {
+                                    const result = await checkExistingReservations(userEmail, bearerToken, true);
+                                    resolve(result);
+                                } catch (retryError) {
+                                    reject(retryError);
+                                }
+                            },
+                            // Cancel
+                            () => {
+                                reject(new Error('SSL verification failed and user cancelled'));
+                            }
+                        );
+                    });
+                }
+                throw error;
             }
         }
 
-        async function proceedWithBooking() {
+        async function proceedWithBooking(retryInsecure = false) {
             const userEmail = document.getElementById('email').value;
             const bearerToken = document.getElementById('bearerToken').value;
             const seatNumber = document.getElementById('seatNumber').value;
@@ -1129,8 +1379,9 @@
                 });
 
                 const jsonPayload = `{${dateObjects.join(',')}}`;
+                const targetUrl = API_BASE + '/CreateBooking/PostSeatBookingMultiDateNew/?locationId=11&sublocationId=26&floorId=4&zoneId=Open%20Space&seatIDs=' + seatId + '&emailId=' + userEmail + '&reason=null&starttime=08:00AM&endtime=06:00PM';
 
-                const response = await fetch(`http://localhost:3000/proxy?url=${encodeURIComponent(API_BASE + '/CreateBooking/PostSeatBookingMultiDateNew/?locationId=11&sublocationId=26&floorId=4&zoneId=Open%20Space&seatIDs=' + seatId + '&emailId=' + userEmail + '&reason=null&starttime=08:00AM&endtime=06:00PM')}`, {
+                const response = await makeProxyRequest(targetUrl, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -1140,7 +1391,7 @@
                         'Referer': 'https://hotdesk.cat.com/create-booking'
                     },
                     body: jsonPayload
-                });
+                }, retryInsecure);
 
                 const result = await response.text();
                 const bookingStatusDiv = document.getElementById('actualBookingStatus');
@@ -1165,6 +1416,24 @@
                     throw new Error(`Booking failed: ${result}`);
                 }
             } catch (error) {
+                if (error.type === 'ssl_error') {
+                    // Show SSL error dialog and wait for user choice
+                    showSSLErrorDialog(
+                        error.data,
+                        // Retry with insecure mode
+                        async () => {
+                            await proceedWithBooking(true);
+                        },
+                        // Cancel
+                        () => {
+                            const bookingStatusDiv = document.getElementById('actualBookingStatus');
+                            bookingStatusDiv.className = 'status-message status-error';
+                            bookingStatusDiv.innerHTML = 'Booking cancelled due to SSL certificate error.';
+                        }
+                    );
+                    return;
+                }
+
                 const bookingStatusDiv = document.getElementById('actualBookingStatus');
                 bookingStatusDiv.className = 'status-message status-error';
                 bookingStatusDiv.innerHTML = `Booking failed: ${error.message}`;
