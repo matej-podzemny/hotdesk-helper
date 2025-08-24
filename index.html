@@ -14,7 +14,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #FFDE00 0%, #F1C40F 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -29,8 +29,8 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-            color: white;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: #FFDE00;
             padding: 30px;
             text-align: center;
         }
@@ -66,8 +66,8 @@
         }
 
         .step-number {
-            background: #4CAF50;
-            color: white;
+            background: #FFDE00;
+            color: #000000;
             width: 30px;
             height: 30px;
             border-radius: 50%;
@@ -104,8 +104,8 @@
         textarea:focus,
         select:focus {
             outline: none;
-            border-color: #4CAF50;
-            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+            border-color: #FFDE00;
+            box-shadow: 0 0 0 3px rgba(255, 222, 0, 0.2);
         }
 
         .calendar-container {
@@ -122,8 +122,8 @@
         }
 
         .calendar-header {
-            background: #4CAF50;
-            color: white;
+            background: #000000;
+            color: #FFDE00;
             padding: 15px;
             text-align: center;
             font-weight: bold;
@@ -135,7 +135,7 @@
         .nav-btn {
             background: none;
             border: none;
-            color: white;
+            color: #FFDE00;
             font-size: 20px;
             cursor: pointer;
             padding: 5px 10px;
@@ -144,7 +144,7 @@
         }
 
         .nav-btn:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 222, 0, 0.2);
         }
 
         .calendar-grid {
@@ -174,7 +174,7 @@
         }
 
         .day:hover {
-            background-color: #e8f5e8;
+            background-color: #fffacd;
         }
 
         .day.other-month {
@@ -183,16 +183,15 @@
         }
 
         .day.selected {
-            background-color: #4CAF50;
-            color: white;
+            background-color: #FFDE00;
+            color: #000000;
             font-weight: bold;
         }
 
         .day.today {
-            background-color: #FFD700;
             color: #333;
             font-weight: bold;
-            border: 2px solid #FFA000;
+            border: 2px solid #000000;
             box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.3);
         }
 
@@ -213,29 +212,31 @@
         .selected-dates {
             margin-top: 20px;
             padding: 15px;
-            background: #e8f5e8;
+            background: #fffacd;
             border-radius: 8px;
+            border: 1px solid #FFDE00;
         }
 
         .selected-dates h4 {
             margin-bottom: 10px;
-            color: #4CAF50;
+            color: #000000;
         }
 
         .date-tag {
             display: inline-block;
-            background: #4CAF50;
-            color: white;
+            background: #FFDE00;
+            color: #000000;
             padding: 5px 12px;
             margin: 3px;
             border-radius: 15px;
             font-size: 14px;
             cursor: pointer;
             transition: background-color 0.3s;
+            border: 1px solid #000000;
         }
 
         .date-tag:hover {
-            background: #45a049;
+            background: #F1C40F;
         }
 
         .weekday-selection {
@@ -277,13 +278,13 @@
         }
 
         .weekday-checkbox:hover {
-            border-color: #4CAF50;
+            border-color: #FFDE00;
         }
 
         .weekday-checkbox.checked {
-            background: #4CAF50;
-            color: white;
-            border-color: #4CAF50;
+            background: #FFDE00;
+            color: #000000;
+            border-color: #000000;
         }
 
         .weekday-checkbox input {
@@ -319,23 +320,25 @@
         }
 
         .btn-primary {
-            background: #4CAF50;
-            color: white;
+            background: #FFDE00;
+            color: #000000;
+            border: 2px solid #000000;
         }
 
         .btn-primary:hover {
-            background: #45a049;
+            background: #F1C40F;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+            box-shadow: 0 5px 15px rgba(255, 222, 0, 0.3);
         }
 
         .btn-secondary {
-            background: #6c757d;
-            color: white;
+            background: #000000;
+            color: #FFDE00;
+            border: 2px solid #FFDE00;
         }
 
         .btn-secondary:hover {
-            background: #5a6268;
+            background: #1a1a1a;
             transform: translateY(-2px);
         }
 
@@ -378,7 +381,7 @@
             width: 20px;
             height: 20px;
             border: 3px solid #f3f3f3;
-            border-top: 3px solid #4CAF50;
+            border-top: 3px solid #FFDE00;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-right: 10px;
@@ -395,8 +398,8 @@
         }
 
         .footer {
-            background: #6c757d;
-            color: white;
+            background: #000000;
+            color: #FFDE00;
             padding: 20px;
             text-align: center;
             margin-top: 50px;
@@ -404,7 +407,7 @@
         }
 
         .footer .heart {
-            color: #FFD700;
+            color: #FFDE00;
             font-size: 16px;
             margin: 0 5px;
         }
@@ -447,8 +450,8 @@
         }
 
         .booking-section-title {
-            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
-            color: white;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: #FFDE00;
             padding: 15px 20px;
             margin: 0;
             font-size: 1.2em;
@@ -462,13 +465,13 @@
         }
 
         .booking-item {
-            background: #f8f9fa;
+            background: #fffde6;
             border: 1px solid #e9ecef;
             border-radius: 8px;
             padding: 15px;
             margin-bottom: 12px;
             transition: all 0.3s ease;
-            border-left: 4px solid #4CAF50;
+            border-left: 4px solid #FFDE00;
         }
 
         .booking-item:hover {
@@ -477,8 +480,8 @@
         }
 
         .booking-item.today {
-            border-left-color: #FF9800;
-            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left-color: #000000;
+            background: linear-gradient(135deg, #fffacd 0%, #fff8b3 100%);
         }
 
         .booking-date {
@@ -675,7 +678,13 @@
 
         .booking-item.for-someone {
             border-left-color: #9C27B0;
-            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            background: linear-gradient(135deg, #e0b8e7 0%, #f3e5f5 100%);
+        }
+
+        .booking-item.history {
+            border-left-color: #6c757d;
+            background: linear-gradient(135deg, #eeecec 0%, #f8f9fa 100%);
+            opacity: 0.8;
         }
 
         .for-someone-label {
