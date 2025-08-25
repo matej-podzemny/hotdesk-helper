@@ -28,12 +28,19 @@ class ProxyHandler(http.server.BaseHTTPRequestHandler):
     def do_POST(self):
         """Handle POST requests to /proxy endpoint"""
         if self.path.startswith('/proxy'):
-            self.handle_proxy_request()
+            self.handle_proxy_request('POST')
         else:
             self.send_error(404, "Endpoint not found")
 
-    def handle_proxy_request(self):
-        """Proxy POST requests to external API"""
+    def do_GET(self):
+        """Handle GET requests to /proxy endpoint"""
+        if self.path.startswith('/proxy'):
+            self.handle_proxy_request('GET')
+        else:
+            self.send_error(404, "Endpoint not found")
+
+    def handle_proxy_request(self, method='POST'):
+        """Proxy requests to external API"""
         try:
             # Parse the URL and query parameters
             parsed_url = urlparse(self.path)
@@ -47,14 +54,19 @@ class ProxyHandler(http.server.BaseHTTPRequestHandler):
             target_url = query_params['url'][0]
             
             # Read request body
-            content_length = int(self.headers.get('Content-Length', 0))
-            post_data = self.rfile.read(content_length) if content_length > 0 else b''
+            post_data = None
+            if method == 'POST':
+                content_length = int(self.headers.get('Content-Length', 0))
+                post_data = self.rfile.read(content_length) if content_length > 0 else b''
             
             # Prepare headers for the target request
             headers = {
-                'Content-Type': 'application/json',
                 'User-Agent': 'Hotdesk-Helper-Proxy/1.0'
             }
+            
+            # Add Content-Type for POST requests
+            if method == 'POST':
+                headers['Content-Type'] = 'application/json'
             
             # Forward Bearer token if present
             if 'Bearer' in self.headers:
@@ -67,11 +79,11 @@ class ProxyHandler(http.server.BaseHTTPRequestHandler):
                 target_url,
                 data=post_data,
                 headers=headers,
-                method='POST'
+                method=method
             )
             
             # Make the request
-            print(f"🔄 Proxying POST request to: {target_url}")
+            print(f"🔄 Proxying {method} request to: {target_url}")
             
             with urllib.request.urlopen(req) as response:
                 response_data = response.read()
