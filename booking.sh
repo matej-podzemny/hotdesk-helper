@@ -14,7 +14,22 @@ fi
 source "$CONFIG_FILE"
 echo "✅ Configuration loaded from '$CONFIG_FILE'"
 
-# --- 🔧 Set Defaults & Validate Configuration 🔧 ---
+# Run version check on startup (if enabled)
+CHECK_VERSION=${CHECK_VERSION:=1}
+if [ "$CHECK_VERSION" -eq 1 ]; then
+    echo "🔍 Checking for updates..."
+    
+    # Use unified version checker
+    if command -v python3 >/dev/null 2>&1; then
+        python3 check_version.py
+    elif command -v python >/dev/null 2>&1; then
+        python check_version.py
+    else
+        echo "⚠️  Python not found, skipping version check"
+    fi
+    echo ""
+fi
+
 # If weekday settings are missing from the config, default them to 0 (don't book).
 BOOK_MONDAY=${BOOK_MONDAY:=0}
 BOOK_TUESDAY=${BOOK_TUESDAY:=0}
