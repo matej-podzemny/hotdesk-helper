@@ -33,6 +33,7 @@
             color: #FFDE00;
             padding: 30px;
             text-align: center;
+            position: relative;
         }
 
         .header h1 {
@@ -43,6 +44,40 @@
         .header p {
             font-size: 1.2em;
             opacity: 0.9;
+        }
+
+        .version-info {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 0.9em;
+            opacity: 0.7;
+            color: #FFDE00;
+        }
+
+        .version-check {
+            margin-top: 5px;
+            font-size: 0.8em;
+        }
+
+        .update-notification {
+            background: #ff6b6b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin: 10px;
+            text-align: center;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .update-notification a {
+            color: white;
+            text-decoration: underline;
         }
 
         .main-content {
@@ -702,7 +737,18 @@
 <body>
     <div class="container">
         <div class="header">
+            <div class="version-info">
+                <div id="currentVersion">v1</div>
+                <div class="version-check" id="versionCheck">Checking for updates...</div>
+            </div>
             <h1>🏢 Hotdesk Reservation System</h1>
+        </div>
+
+        <!-- Update notification -->
+        <div id="updateNotification" class="update-notification">
+            <strong>🆕 New version available!</strong><br>
+            <span id="updateDetails"></span><br>
+            <a href="javascript:void(0)" onclick="updateApp()">Update now with git pull</a>
         </div>
 
         <div class="main-content">
@@ -902,6 +948,51 @@
 
         const API_BASE = 'https://hotdesk.cat.com/api';
 
+        async function checkVersion() {
+            const versionCheckElement = document.getElementById('versionCheck');
+            const updateNotification = document.getElementById('updateNotification');
+
+            try {
+                versionCheckElement.textContent = 'Checking for updates...';
+
+                const response = await fetch('http://localhost:3000/version-check');
+                
+                if (response.ok) {
+                    const versionData = await response.json();
+                    
+                    document.getElementById('currentVersion').textContent = versionData.current_version;
+                    
+                    if (versionData.status === 'update_available') {
+                        versionCheckElement.textContent = `Update available: ${versionData.latest_version}`;
+                        document.getElementById('updateDetails').innerHTML =
+                            `Current: ${versionData.current_version} → Latest: ${versionData.latest_version}`;
+                        updateNotification.style.display = 'block';
+
+                        setTimeout(() => {
+                            updateNotification.style.display = 'none';
+                        }, 10000);
+                    } else if (versionData.status === 'up_to_date') {
+                        versionCheckElement.textContent = 'Up to date ✅';
+                    } else if (versionData.status === 'no_releases') {
+                        versionCheckElement.textContent = 'No releases found';
+                    } else if (versionData.status === 'error') {
+                        versionCheckElement.textContent = 'Update check failed';
+                        console.warn('Version check error:', versionData.error);
+                    }
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                console.warn('Version check failed:', error);
+                versionCheckElement.textContent = 'Update check failed (proxy needed)';
+                updateNotification.style.display = 'none';
+            }
+        }
+
+        function updateApp() {
+            alert('To update the application:\n\n1. Open a terminal/command prompt\n2. Navigate to the project directory\n3. Run: git pull\n4. Restart the proxy server (python proxy_server.py)\n5. Refresh this page\n\nThis will download the latest version.');
+        }
+
         // Seat mapping from seat name to seat ID
         const SEAT_MAPPING = {
             '1': 8397, '2': 8377, '3': 8357, '4': 8396, '5': 8376,
@@ -971,6 +1062,7 @@
             populateSeatDropdown();
             loadUserData();
             setupAutoSave();
+            checkVersion();
 
             setTimeout(() => {
                 const validation = validateUserCredentials();

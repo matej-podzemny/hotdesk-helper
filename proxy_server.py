@@ -33,9 +33,11 @@ class ProxyHandler(http.server.BaseHTTPRequestHandler):
             self.send_error(404, "Endpoint not found")
 
     def do_GET(self):
-        """Handle GET requests to /proxy endpoint"""
+        """Handle GET requests to /proxy endpoint and version check"""
         if self.path.startswith('/proxy'):
             self.handle_proxy_request('GET')
+        elif self.path == '/version-check':
+            self.handle_version_check()
         else:
             self.send_error(404, "Endpoint not found")
 
@@ -130,6 +132,57 @@ class ProxyHandler(http.server.BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Bearer, X-Requested-With')
+
+    def handle_version_check(self):
+        try:
+            import subprocess
+            import os
+            
+            python_cmd = 'python3' if self.is_command_available('python3') else 'python'
+            
+            if not self.is_command_available(python_cmd):
+                self.send_error_response(500, {'error': 'Python not available for version check'})
+                return
+            
+            result = subprocess.run(
+                [python_cmd, 'check_version.py', '--json'], 
+                capture_output=True, 
+                text=True,
+                timeout=15
+            )
+            
+            if result.returncode in [0, 1, 2]:  # Success, error, update available
+                try:
+                    version_data = json.loads(result.stdout)
+                    self.send_json_response(version_data)
+                    print(f"✅ Version check completed: {version_data.get('status')}")
+                except json.JSONDecodeError:
+                    self.send_error_response(500, {'error': 'Invalid JSON from version checker'})
+            else:
+                self.send_error_response(500, {'error': f'Version checker failed: {result.stderr}'})
+                
+        except subprocess.TimeoutExpired:
+            self.send_error_response(500, {'error': 'Version check timed out'})
+        except Exception as e:
+            print(f"❌ Version check error: {str(e)}")
+            self.send_error_response(500, {'error': f'Version check failed: {str(e)}'})
+
+    def is_command_available(self, command):
+        import subprocess
+        try:
+            subprocess.run([command, '--version'], capture_output=True, timeout=5)
+            return True
+        except:
+            return False
+
+    def send_json_response(self, data):
+        self.send_response(200)
+        self.send_cors_headers()
+        self.send_header('Content-Type', 'application/json')
+        self.end_headers()
+        
+        json_response = json.dumps(data).encode('utf-8')
+        self.wfile.write(json_response)
 
     def send_error_response(self, status_code, error_data):
         """Send JSON error response"""
