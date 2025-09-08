@@ -1,0 +1,54 @@
+name: Auto Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Get next tag
+        id: get_tag
+        run: |
+          LAST_TAG=$(git tag | grep -E '^v[0-9]+$' | sort -V | tail -n 1)
+          echo "Last tag: $LAST_TAG"
+          if [ -z "$LAST_TAG" ]; then
+            NEXT_TAG=v1
+          else
+            NUM=${LAST_TAG#v}
+            NEXT_NUM=$((NUM + 1))
+            NEXT_TAG="v$NEXT_NUM"
+          fi
+          echo "NEXT_TAG=$NEXT_TAG" >> $GITHUB_ENV
+          echo "next_tag=$NEXT_TAG" >> $GITHUB_OUTPUT
+
+      - name: Update VERSION file
+        run: |
+          echo "${{ env.NEXT_TAG }}" > VERSION
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add VERSION
+          git commit -m "chore: bump version to ${{ env.NEXT_TAG }}" || echo "No changes to commit"
+          git push
+
+      - name: Create Git tag
+        run: |
+          git tag ${{ env.NEXT_TAG }}
+          git push origin ${{ env.NEXT_TAG }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.NEXT_TAG }}
+          name: "${{ env.NEXT_TAG }}"
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
