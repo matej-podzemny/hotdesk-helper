@@ -2,18 +2,24 @@
 
 A comprehensive desk booking solution for the `hotdesk.cat.com` system. This tool provides both a command-line script and a web interface for booking desks efficiently.
 
-## Quick Start
+## Table of Contents
 
-### Option 1: Use the Web Interface
-
-1. **Download and extract** the files to your computer
-2. **Run the application:**
-   - **Windows**: Double-click `start.bat`
-   - **macOS/Linux**: Run `./start.sh` in terminal
-3. **Configure** your details in the web interface
-4. **Select dates** and **book your desk**
-
-### Option 2: Use the Command Line Script
+- [Installation and Setup](#installation-and-setup)
+  - [Step 1: Clone the Repository](#step-1-clone-the-repository)
+  - [Step 2: Navigate into the Directory](#step-2-navigate-into-the-directory)
+  - [Step 3: Make Scripts Executable](#step-3-make-scripts-executable-macoslinux-only)
+- [Configuration](#configuration)
+  - [Creating Your Configuration File](#creating-your-configuration-file)
+  - [Required Settings](#required-settings)
+  - [Booking Mode Selection](#booking-mode-selection)
+  - [Weekday Selection](#weekday-selection)
+  - [How to Find Your SEAT_ID and BEARER_TOKEN](#how-to-find-your-seat_id-and-bearer_token)
+- [Usage](#usage)
+  - [Web Interface](#web-interface)
+  - [Command Line Script](#command-line-script)
+- [Troubleshooting](#troubleshooting)
+  - [Common Issues](#common-issues)
+  - [Response Interpretation](#response-interpretation)
 
 ## Installation and Setup
 
@@ -41,7 +47,26 @@ chmod +x booking.sh start.sh
 
 This is the most important step for the command-line script. You must configure the script before running it.
 
-Open the `config.env` file in your favorite text editor and edit the values.
+### Creating Your Configuration File
+
+The repository includes a template configuration file (`config.env.example`). You need to create your own `config.env` file by copying this template:
+
+**Windows (Command Prompt):**
+```cmd
+copy config.env.example config.env
+```
+
+**Windows (PowerShell):**
+```powershell
+Copy-Item config.env.example config.env
+```
+
+**macOS/Linux:**
+```bash
+cp config.env.example config.env
+```
+
+After creating the file, open `config.env` in your favorite text editor and edit the values according to your needs.
 
 ### Required Settings
 
@@ -130,7 +155,7 @@ You need to extract these values from your browser while logged into the hotdesk
 
 ## Usage
 
-### Web Interface (Recommended)
+### Web Interface
 
 **Windows:**
 ```cmd
