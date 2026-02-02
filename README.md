@@ -13,7 +13,7 @@ A comprehensive desk booking solution for the `hotdesk.cat.com` system. This too
   - [Required Settings](#required-settings)
   - [Booking Mode Selection](#booking-mode-selection)
   - [Weekday Selection](#weekday-selection)
-  - [How to Find Your SEAT_ID and BEARER_TOKEN](#how-to-find-your-seat_id-and-bearer_token)
+  - [How to Find Your SEAT_ID and COOKIE](#how-to-find-your-seat_id-and-cookie)
 - [Usage](#usage)
   - [Web Interface](#web-interface)
   - [Command Line Script](#command-line-script)
@@ -79,8 +79,8 @@ EMAIL="your.email@company.com"
 # The ID of the seat you want to book
 SEAT_ID="YOUR_SEAT_ID_HERE"
 
-# Your Bearer token
-BEARER_TOKEN="PASTE_YOUR_BEARER_TOKEN_HERE"
+# Your Cookie
+COOKIE="PASTE_YOUR_COOKIE_HERE"
 ```
 
 ### Booking Mode Selection
@@ -122,7 +122,7 @@ BOOK_WEDNESDAY=1   # Wednesday
 BOOK_THURSDAY=0    # Thursday (disabled)
 BOOK_FRIDAY=0      # Friday (disabled)
 ```
-### How to Find Your `SEAT_ID` and `BEARER_TOKEN`
+### How to Find Your `SEAT_ID` and `COOKIE`
 
 You need to extract these values from your browser while logged into the hotdesk system:
 
@@ -143,13 +143,13 @@ You need to extract these values from your browser while logged into the hotdesk
    - Look for `seatIDs=` and copy the number that follows
    - ⚠️ **Important**: This internal ID differs from the visible desk number on the floor plan
    
-   **For `BEARER_TOKEN`:**
-   - In the **Request Headers** section, find the `Bearer` header
-   - Copy the entire long string that follows it
+   **For `Cookie`:**
+   - In the **Request Headers** section, find the `Cookie` header
+   - If you don't have adblock you will see bunch of unrelated text. Just scroll down and copy cookie from: `.AspNet.Cookies=` (including)
 
 4. **Update Your Configuration**
    - Paste these values into your `config.env` file
-   - Replace the placeholder values for `EMAIL`, `SEAT_ID`, and `BEARER_TOKEN`
+   - Replace the placeholder values for `EMAIL`, `SEAT_ID`, and `COOKIE`
 
 <img width="1906" height="971" alt="Developer Tools Screenshot" src="https://github.com/user-attachments/assets/e02f7038-dd24-47c5-aca1-24e6f0900e41" />
 
@@ -168,7 +168,7 @@ start.bat
 ```
 
 The web interface will open automatically in your browser. Simply:
-1. Configure your email, seat, and bearer token
+1. Configure your email, seat, and cookie
 2. Select your desired dates using the calendar
 3. Click "Book Now" to submit your reservations
 
@@ -192,12 +192,12 @@ The script will:
 
 **"Please configure your details first"**
 - You forgot to replace placeholder values in `config.env`
-- Make sure `SEAT_ID`, `BEARER_TOKEN`, and `EMAIL` are properly set
+- Make sure `SEAT_ID`, `COOKIE`, and `EMAIL` are properly set
 
 **Booking fails / "Something went wrong"**
-- **Most common cause**: Expired `BEARER_TOKEN`  
-  - Tokens are temporary and expire quickly
-  - Get a fresh token from your browser and update `config.env`
+- **Most common cause**: Expired `COOKIE`  
+  - Cookies are temporary and expire quickly
+  - Get a fresh cookie from your browser and update `config.env`
 - **Alternative cause**: Dates already booked
   - Check the API response - it may show existing booking details
   - Verify your bookings on the website
@@ -234,7 +234,7 @@ This usually means the dates are already booked. Check the website to confirm yo
 
 ### Getting Help
 
-- **Bearer Token Issues**: The token expires frequently. Always get a fresh one when booking fails.
+- **Cookie Issues**: The cookie expires frequently. Always get a fresh one when booking fails.
 - **Seat ID Issues**: Remember that the internal seat ID differs from the displayed desk number.
 - **Date Issues**: Ensure your date format is correct (YYYY-MM-DD) and dates are in the future.
 
