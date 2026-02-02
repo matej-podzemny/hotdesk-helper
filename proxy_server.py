@@ -21,7 +21,7 @@ class ProxyHandler(http.server.BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type, X-Cookie, X-Bearer, X-Requested-With')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type, X-Cookie, X-Requested-With')
         self.send_header('Access-Control-Max-Age', '86400')
         self.end_headers()
 
@@ -72,11 +72,7 @@ class ProxyHandler(http.server.BaseHTTPRequestHandler):
             
             if 'X-Cookie' in self.headers:
                 headers['Cookie'] = self.headers['X-Cookie']
-            
-            # Check for X-Bearer header (for bearer token auth)
-            if 'X-Bearer' in self.headers:
-                headers['Cookie'] = self.headers['X-Bearer']
-            
+                        
             # Create the request
             req = urllib.request.Request(
                 target_url,
@@ -132,7 +128,7 @@ class ProxyHandler(http.server.BaseHTTPRequestHandler):
         """Send CORS headers"""
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type, X-Cookie, X-Bearer, X-Requested-With')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type, X-Cookie, X-Requested-With')
 
     def handle_version_check(self):
         try:
