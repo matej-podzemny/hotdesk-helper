@@ -21,7 +21,7 @@ class ProxyHandler(http.server.BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Bearer, X-Requested-With')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type, X-Cookie, X-Requested-With')
         self.send_header('Access-Control-Max-Age', '86400')
         self.end_headers()
 
@@ -70,12 +70,9 @@ class ProxyHandler(http.server.BaseHTTPRequestHandler):
             if method == 'POST':
                 headers['Content-Type'] = 'application/json'
             
-            # Forward Bearer token if present
-            if 'Bearer' in self.headers:
-                headers['Bearer'] = self.headers['Bearer']
-            if 'Authorization' in self.headers:
-                headers['Authorization'] = self.headers['Authorization']
-            
+            if 'X-Cookie' in self.headers:
+                headers['Cookie'] = self.headers['X-Cookie']
+                        
             # Create the request
             req = urllib.request.Request(
                 target_url,
@@ -131,12 +128,11 @@ class ProxyHandler(http.server.BaseHTTPRequestHandler):
         """Send CORS headers"""
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Bearer, X-Requested-With')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type, X-Cookie, X-Requested-With')
 
     def handle_version_check(self):
         try:
             import subprocess
-            import os
             
             python_cmd = 'python3' if self.is_command_available('python3') else 'python'
             
@@ -170,8 +166,8 @@ class ProxyHandler(http.server.BaseHTTPRequestHandler):
     def is_command_available(self, command):
         import subprocess
         try:
-            subprocess.run([command, '--version'], capture_output=True, timeout=5)
-            return True
+            result = subprocess.run([command, '--version'], capture_output=True, timeout=5)
+            return result.returncode == 0
         except:
             return False
 

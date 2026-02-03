@@ -43,10 +43,10 @@ START_DATE_OFFSET=${START_DATE_OFFSET:=15}
 
 # --- Validation ---
 # Check if the user has updated the placeholder variables.
-if [ "$SEAT_ID" == "YOUR_SEAT_ID_HERE" ] || [ "$BEARER_TOKEN" == "PASTE_YOUR_BEARER_TOKEN_HERE" ] || [ "$EMAIL" == "PASTE_YOUR_EMAIL_HERE" ] ; then
+if [ "$SEAT_ID" == "YOUR_SEAT_ID_HERE" ] || [ "$COOKIE" == "PASTE_YOUR_COOKIE_HERE" ] || [ "$EMAIL" == "PASTE_YOUR_EMAIL_HERE" ] ; then
   echo "🛑 Error: Please configure your details first."
   echo "You must edit the 'User Configuration' section in config.env"
-  echo "and replace the placeholder values for SEAT_ID, BEARER_TOKEN, and EMAIL."
+  echo "and replace the placeholder values for SEAT_ID, COOKIE, and EMAIL."
   exit 1
 fi
 
@@ -225,7 +225,7 @@ RESPONSE=$(curl -s "https://hotdesk.cat.com/api/CreateBooking/PostSeatBookingMul
   -X POST \
   -H 'Accept: application/json' \
   -H 'Accept-Language: undefined' \
-  -H "Bearer: ${BEARER_TOKEN}" \
+  -H "Cookie: ${COOKIE}" \
   -H 'Content-Type: application/json' \
   -H 'Origin: https://hotdesk.cat.com' \
   -H 'Referer: https://hotdesk.cat.com/create-booking' \

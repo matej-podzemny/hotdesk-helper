@@ -114,7 +114,7 @@
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-top: 20px;
         }
 
         label {
@@ -343,7 +343,7 @@
         }
 
         .btn {
-            padding: 15px 30px;
+            padding: 12px 30px;
             border: none;
             border-radius: 8px;
             font-size: 16px;
@@ -432,6 +432,455 @@
             }
         }
 
+        /* Friends Checker Styles */
+        .friend-input-group {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .friend-input-group input {
+            flex: 1;
+        }
+
+        .friends-results {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            min-height: 50px;
+        }
+
+        .friend-result {
+            background: white;
+            border: 2px solid #FFDE00;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .friend-result.reserved {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .friend-result.not-reserved {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .friend-info {
+            flex: 1;
+        }
+
+        .friend-email {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .friend-seat {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .friend-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-save-friend,
+        .btn-remove-friend {
+            padding: 8px 16px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-save-friend {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-save-friend:hover {
+            background: #218838;
+        }
+
+        .btn-remove-friend {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-remove-friend:hover {
+            background: #c82333;
+        }
+
+        .saved-friends {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+
+        .saved-friends h4 {
+            margin-bottom: 15px;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-edit-friends {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-edit-friends:hover {
+            background: #5a6268;
+        }
+
+        .btn-edit-friends.editing {
+            background: #dc3545;
+        }
+
+        .btn-edit-friends.editing:hover {
+            background: #c82333;
+        }
+
+        .friend-tag {
+            display: inline-flex;
+            align-items: center;
+            background: #FFDE00;
+            color: #000;
+            padding: 8px 12px;
+            margin: 5px;
+            border-radius: 20px;
+            font-size: 14px;
+            border: 2px solid #000;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .friend-tag:hover {
+            background: #F1C40F;
+            transform: translateY(-2px);
+        }
+
+        .friend-tag.edit-mode {
+            padding-right: 35px;
+        }
+
+        .friend-email-text {
+            margin-right: 5px;
+        }
+
+        .friend-seat-info {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .friend-tag-remove {
+            display: none;
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            background: #dc3545;
+            color: white;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .friend-tag.edit-mode .friend-tag-remove {
+            display: flex;
+        }
+
+        .friend-tag-remove:hover {
+            background: #c82333;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .easter-egg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            pointer-events: none;
+        }
+
+        .easter-egg-overlay.active {
+            display: flex;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .truck-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .truck {
+            position: absolute;
+            bottom: 50px;
+            right: -400px;
+            width: 350px;
+            height: 200px;
+            animation: driveTruck 5s linear forwards;
+        }
+
+        @keyframes driveTruck {
+            0% { right: -400px; }
+            100% { right: calc(100% + 50px); }
+        }
+
+        .truck-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+        }
+
+        @media screen and (max-width: 768px) {
+            .truck {
+                width: 250px;
+                height: 150px;
+            }
+
+
+        }
+
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                border-radius: 10px;
+            }
+
+            .header {
+                padding: 20px 15px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .version-info {
+                position: static;
+                text-align: center;
+                margin-top: 10px;
+            }
+
+            .main-content {
+                padding: 15px;
+            }
+
+            .step {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+
+            .step h3 {
+                font-size: 1.2em;
+            }
+
+            /* Calendar responsive */
+            .calendar-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .date-range-controls {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .date-range-controls .form-group:last-child {
+                padding: 0;
+            }
+
+            .date-range-controls .form-group:last-child label {
+                display: block;
+            }
+
+            /* Weekday selection responsive */
+            .weekday-selection {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+
+            .weekday-checkbox {
+                padding: 8px;
+                font-size: 14px;
+            }
+
+            /* Buttons responsive */
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn {
+                width: 100%;
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+
+            /* Bookings container responsive */
+            .bookings-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .booking-item {
+                padding: 12px;
+            }
+
+            .booking-details .detail-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            /* Friends Checker responsive */
+            .friend-input-group {
+                flex-direction: column;
+            }
+
+            .friend-input-group input {
+                width: 100%;
+            }
+
+            .friend-input-group .btn {
+                width: 100%;
+            }
+
+            .friend-result {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .friend-actions {
+                width: 100%;
+                flex-direction: column;
+            }
+
+            .btn-save-friend,
+            .btn-remove-friend {
+                width: 100%;
+            }
+
+            .friend-tag {
+                display: flex;
+                margin: 3px;
+                width: calc(100% - 6px);
+                justify-content: space-between;
+            }
+
+            /* Calendar grid adjustments for mobile */
+            .day {
+                padding: 10px 5px;
+                font-size: 14px;
+                min-height: 40px;
+            }
+
+            .day-header {
+                padding: 8px 4px;
+                font-size: 12px;
+            }
+
+            /* Update notification responsive */
+            .update-notification {
+                position: fixed;
+                top: 10px;
+                left: 10px;
+                right: 10px;
+                width: auto;
+                font-size: 14px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .step h3 {
+                font-size: 1.1em;
+            }
+
+            .step-number {
+                width: 25px;
+                height: 25px;
+                font-size: 14px;
+            }
+
+            .weekday-selection {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .calendar-grid {
+                font-size: 14px;
+            }
+
+            .day {
+                padding: 8px 3px;
+                font-size: 12px;
+            }
+
+            .day-header {
+                padding: 6px 2px;
+                font-size: 11px;
+            }
+
+            input,
+            textarea,
+            select {
+                font-size: 14px;
+            }
+
+            .btn {
+                padding: 10px 15px;
+                font-size: 13px;
+            }
+        }
+
         .footer {
             background: #000000;
             color: #FFDE00;
@@ -445,28 +894,6 @@
             color: #FFDE00;
             font-size: 16px;
             margin: 0 5px;
-        }
-
-        @media (max-width: 768px) {
-            .calendar-container {
-                grid-template-columns: 1fr;
-            }
-
-            .weekday-selection {
-                grid-template-columns: 1fr;
-            }
-
-            .action-buttons {
-                flex-direction: column;
-            }
-
-            .date-range-controls {
-                grid-template-columns: 1fr;
-            }
-
-            .bookings-container {
-                grid-template-columns: 1fr;
-            }
         }
 
         /* Booking Display Styles */
@@ -731,6 +1158,231 @@
             margin-left: 10px;
             font-weight: normal;
         }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                border-radius: 10px;
+            }
+
+            .header {
+                padding: 20px 15px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+                margin-bottom: 5px;
+            }
+
+            .version-info {
+                position: static;
+                margin-bottom: 10px;
+                font-size: 0.75em;
+            }
+
+            .update-notification {
+                position: static;
+                margin: 10px;
+                font-size: 0.9em;
+            }
+
+            .main-content {
+                padding: 15px;
+            }
+
+            .step {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+
+            .step h3 {
+                font-size: 1.2em;
+            }
+
+            .calendar-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .calendar-header {
+                padding: 10px;
+                font-size: 0.9em;
+            }
+
+            .day {
+                padding: 10px 5px;
+                min-height: 40px;
+                font-size: 0.9em;
+            }
+
+            .day-header {
+                padding: 8px;
+                font-size: 0.8em;
+            }
+
+            .weekday-selection {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            .weekday-checkbox {
+                padding: 8px;
+                font-size: 0.9em;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn {
+                padding: 12px 20px;
+                font-size: 14px;
+                width: 100%;
+            }
+
+            .date-range-controls {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .date-range-controls .form-group:last-child {
+                padding: 0;
+            }
+
+            .date-range-controls .form-group:last-child label {
+                display: block;
+            }
+
+            .bookings-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .booking-section-title {
+                padding: 12px 15px;
+                font-size: 1em;
+            }
+
+            .booking-list {
+                padding: 10px;
+                max-height: 250px;
+            }
+
+            .booking-item {
+                padding: 12px;
+            }
+
+            .booking-date {
+                font-size: 1em;
+                flex-wrap: wrap;
+            }
+
+            .booking-details {
+                font-size: 0.85em;
+            }
+
+            .booking-details .detail-row {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .select-all-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                padding: 10px;
+            }
+
+            .inline-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .bulk-actions {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .selected-dates h4 {
+                font-size: 1em;
+            }
+
+            .date-tag {
+                font-size: 0.85em;
+                padding: 4px 10px;
+            }
+
+            input,
+            textarea,
+            select {
+                font-size: 16px;
+                /* Prevents zoom on iOS */
+            }
+
+            .footer {
+                padding: 15px;
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .step h3 {
+                font-size: 1.1em;
+            }
+
+            .step-number {
+                width: 25px;
+                height: 25px;
+                font-size: 0.9em;
+                margin-right: 10px;
+            }
+
+            .weekday-selection {
+                grid-template-columns: 1fr;
+            }
+
+            .calendar-grid {
+                font-size: 0.85em;
+            }
+
+            .day {
+                padding: 8px 3px;
+                min-height: 35px;
+            }
+
+            .day-header {
+                padding: 6px;
+            }
+
+            .booking-item {
+                padding: 10px;
+            }
+
+            .booking-date {
+                font-size: 0.95em;
+            }
+
+            .for-someone-label {
+                font-size: 0.7em;
+                padding: 2px 6px;
+            }
+
+            .btn-delete,
+            .btn-bulk-delete {
+                font-size: 11px;
+                padding: 5px 10px;
+            }
+        }
     </style>
 </head>
 
@@ -748,10 +1400,35 @@
         <div id="updateNotification" class="update-notification">
             <strong>🆕 New version available!</strong><br>
             <span id="updateDetails"></span><br>
-            <a href="javascript:void(0)" onclick="updateApp()">Update now with git pull</a>
+            <span>Notify admin to update this page.</span>
         </div>
 
         <div class="main-content">
+            <!-- Friends Checker Section -->
+            <div class="step" id="friendsChecker">
+                <h3><span class="step-number">👥</span>Friends Checker</h3>
+
+                <div class="saved-friends" id="savedFriendsList">
+                    <h4>
+                        <span>Saved Friends:</span>
+                        <button class="btn-edit-friends" id="editFriendsBtn" onclick="toggleEditMode()" style="display: none;">Edit</button>
+                    </h4>
+                    <div id="friendsListContainer">No saved friends yet</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="friendEmail">Check Coworker's Seat (Today):</label>
+                    <div class="friend-input-group">
+                        <input type="email" id="friendEmail" placeholder="your.email@company.com">
+                        <button class="btn btn-primary" onclick="checkFriendSeat()">Check Seat</button>
+                    </div>
+                </div>
+
+                <div id="friendsResults" class="friends-results"></div>
+
+                <div id="friendsStatus" class="status-message"></div>
+            </div>
+
             <!-- Step 0: Current Bookings -->
             <div class="step" id="bookingsDisplay">
                 <h3><span class="step-number">📅</span>My Bookings</h3>
@@ -937,6 +1614,15 @@
         </div>
     </div>
 
+    <!-- Easter Egg Overlay -->
+    <div id="easterEggOverlay" class="easter-egg-overlay">
+        <div class="truck-container">
+            <div class="truck">
+                <img src="cat797.png" alt="Caterpillar 797" class="truck-image">
+            </div>
+        </div>
+    </div>
+
     <script>
         // Global variables
         let selectedDates = new Set();
@@ -946,7 +1632,45 @@
         // Set second calendar to next month
         currentMonth2.setMonth(currentMonth2.getMonth() + 1);
 
-        const API_BASE = 'https://hotdesk.cat.com/api';
+        const CURRENT_VERSION = 'v3';
+        const API_BASE = '/proxy';
+
+        // Easter Egg - Key sequence detection
+        let keySequence = [];
+        const SECRET_SEQUENCE = ['t', 'r', 'u', 'c', 'k', 's'];
+        let sequenceTimeout;
+
+        document.addEventListener('keydown', function(e) {
+            // Add the pressed key to sequence (convert to lowercase)
+            keySequence.push(e.key.toLowerCase());
+            
+            // Keep only last 6 keys
+            if (keySequence.length > SECRET_SEQUENCE.length) {
+                keySequence.shift();
+            }
+            
+            // Check if sequence matches
+            if (keySequence.join('') === SECRET_SEQUENCE.join('')) {
+                showEasterEgg();
+                keySequence = []; // Reset sequence
+            }
+            
+            // Reset sequence after 2 seconds of inactivity
+            clearTimeout(sequenceTimeout);
+            sequenceTimeout = setTimeout(() => {
+                keySequence = [];
+            }, 2000);
+        });
+
+        function showEasterEgg() {
+            const overlay = document.getElementById('easterEggOverlay');
+            overlay.classList.add('active');
+            
+            // Auto-hide after animation completes (5 seconds)
+            setTimeout(() => {
+                overlay.classList.remove('active');
+            }, 5000);
+        }
 
         async function checkVersion() {
             const versionCheckElement = document.getElementById('versionCheck');
@@ -955,42 +1679,37 @@
             try {
                 versionCheckElement.textContent = 'Checking for updates...';
 
-                const response = await fetch('http://localhost:3000/version-check');
-                
+                const response = await fetch('https://api.github.com/repos/matej-podzemny/hotdesk-helper/releases/latest');
+
                 if (response.ok) {
                     const versionData = await response.json();
-                    
-                    document.getElementById('currentVersion').textContent = versionData.current_version;
-                    
-                    if (versionData.status === 'update_available') {
-                        versionCheckElement.textContent = `Update available: ${versionData.latest_version}`;
+
+                    document.getElementById('currentVersion').textContent = CURRENT_VERSION;
+
+                    if (versionData.tag_name !== CURRENT_VERSION) {
+                        versionCheckElement.textContent = `Update available: ${versionData.tag_name}`;
                         document.getElementById('updateDetails').innerHTML =
-                            `Current: ${versionData.current_version} → Latest: ${versionData.latest_version}`;
+                            `Current: ${CURRENT_VERSION} → Latest: ${versionData.tag_name}`;
                         updateNotification.style.display = 'block';
 
                         setTimeout(() => {
                             updateNotification.style.display = 'none';
                         }, 10000);
-                    } else if (versionData.status === 'up_to_date') {
+                    } else if (versionData.tag_name === CURRENT_VERSION) {
                         versionCheckElement.textContent = 'Up to date ✅';
-                    } else if (versionData.status === 'no_releases') {
+                    } else if (versionData.tag_name === 'no_releases') {
                         versionCheckElement.textContent = 'No releases found';
-                    } else if (versionData.status === 'error') {
+                    } else {
                         versionCheckElement.textContent = 'Update check failed';
-                        console.warn('Version check error:', versionData.error);
                     }
                 } else {
                     throw new Error(`HTTP ${response.status}`);
                 }
             } catch (error) {
                 console.warn('Version check failed:', error);
-                versionCheckElement.textContent = 'Update check failed (proxy needed)';
+                versionCheckElement.textContent = 'Update check failed';
                 updateNotification.style.display = 'none';
             }
-        }
-
-        function updateApp() {
-            alert('To update the application:\n\n1. Open a terminal/command prompt\n2. Navigate to the project directory\n3. Run: git pull\n4. Restart the proxy server (python proxy_server.py)\n5. Refresh this page\n\nThis will download the latest version.');
         }
 
         // Seat mapping from seat name to seat ID
@@ -1063,6 +1782,7 @@
             loadUserData();
             setupAutoSave();
             checkVersion();
+            loadSavedFriends();
 
             setTimeout(() => {
                 const validation = validateUserCredentials();
@@ -1096,9 +1816,9 @@
                 document.getElementById('seatNumber').value = savedSeat;
             }
 
-            const savedCookie = localStorage.getItem('hotdesk_cookie');
-            if (savedCookie) {
-                document.getElementById('cookie').value = savedCookie;
+            const savedToken = localStorage.getItem('hotdesk_cookie');
+            if (savedToken) {
+                document.getElementById('cookie').value = savedToken;
             }
         }
 
@@ -1117,9 +1837,9 @@
                 localStorage.removeItem('hotdesk_seat');
             }
 
-            const cookie = document.getElementById('cookie').value;
-            if (cookie) {
-                localStorage.setItem('hotdesk_cookie', cookie);
+            const token = document.getElementById('cookie').value;
+            if (token) {
+                localStorage.setItem('hotdesk_cookie', token);
             } else {
                 localStorage.removeItem('hotdesk_cookie');
             }
@@ -1617,14 +2337,12 @@
 
             const jsonPayload = JSON.stringify(dateObjects);
 
-            const response = await fetch(`http://localhost:3000/proxy?url=${encodeURIComponent(API_BASE + '/CreateBooking/CheckSeatAvailabilityBeforeBookingMultiDate/?locationId=11&sublocationId=26&floorId=4&zoneId=Open%20Space&seatIDs=' + seatId + '&starttime=08:00AM&endtime=06:00PM')}`, {
+            const response = await fetch(`${API_BASE}/CreateBooking/CheckSeatAvailabilityBeforeBookingMultiDate/?locationId=11&sublocationId=26&floorId=4&zoneId=Open%20Space&seatIDs=${seatId}&starttime=08:00AM&endtime=06:00PM`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                     'X-Cookie': cookie,
-                    'Content-Type': 'application/json',
-                    'Origin': 'https://hotdesk.cat.com',
-                    'Referer': 'https://hotdesk.cat.com/create-booking'
+                    'Content-Type': 'application/json'
                 },
                 body: jsonPayload
             });
@@ -1679,14 +2397,12 @@
 
                 const jsonPayload = `{${dateObjects.join(',')}}`;
 
-                const response = await fetch(`http://localhost:3000/proxy?url=${encodeURIComponent(API_BASE + '/CreateBooking/PostSeatBookingMultiDateNew/?locationId=11&sublocationId=26&floorId=4&zoneId=Open%20Space&seatIDs=' + validation.data.seatId + '&emailId=' + validation.data.email + '&reason=null&starttime=08:00AM&endtime=06:00PM')}`, {
+                const response = await fetch(`${API_BASE}/CreateBooking/PostSeatBookingMultiDateNew/?locationId=11&sublocationId=26&floorId=4&zoneId=Open%20Space&seatIDs=${validation.data.seatId}&emailId=${validation.data.email}&reason=null&starttime=08:00AM&endtime=06:00PM`, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
                         'X-Cookie': validation.data.cookie,
-                        'Content-Type': 'application/json',
-                        'Origin': 'https://hotdesk.cat.com',
-                        'Referer': 'https://hotdesk.cat.com/create-booking'
+                        'Content-Type': 'application/json'
                     },
                     body: jsonPayload
                 });
@@ -1762,14 +2478,12 @@
 
         async function fetchBookings(endpoint, cookie, errorContext = 'bookings') {
             try {
-                const response = await fetch(`http://localhost:3000/proxy?url=${encodeURIComponent(API_BASE + endpoint)}`, {
+                const response = await fetch(`${API_BASE}${endpoint}`, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json',
                         'X-Cookie': cookie,
-                        'Content-Type': 'application/json',
-                        'Origin': 'https://hotdesk.cat.com',
-                        'Referer': 'https://hotdesk.cat.com/create-booking'
+                        'Content-Type': 'application/json'
                     }
                 });
 
@@ -2061,14 +2775,12 @@
                     `${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()} ${now.toLocaleTimeString('en-US')}`
                 );
 
-                const response = await fetch(`http://localhost:3000/proxy?url=${encodeURIComponent(`https://hotdesk.cat.com/api/MyBookings/DeleteBooking/?locationId=11&currentTZDateTime=${currentTZDateTime}`)}`, {
+                const response = await fetch(`${API_BASE}/MyBookings/DeleteBooking/?locationId=11&currentTZDateTime=${currentTZDateTime}`, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
                         'X-Cookie': validation.data.cookie,
-                        'Content-Type': 'application/json',
-                        'Origin': 'https://hotdesk.cat.com',
-                        'Referer': 'https://hotdesk.cat.com/my-bookings'
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(payload)
                 });
@@ -2243,6 +2955,369 @@
                 }
             });
         }
+
+        function loadSavedFriends() {
+            const savedFriends = JSON.parse(localStorage.getItem('hotdesk_friends') || '[]');
+            displaySavedFriends(savedFriends);
+
+            setTimeout(() => {
+                const validation = validateUserCredentials();
+                if (validation.data.cookie && savedFriends.length > 0) {
+                    checkAllSavedFriends();
+                }
+            }, 1000);
+        }
+
+        function displaySavedFriends(friends) {
+            const container = document.getElementById('friendsListContainer');
+            const editBtn = document.getElementById('editFriendsBtn');
+
+            if (friends.length === 0) {
+                container.innerHTML = '<div style="color: #999; font-style: italic;">No saved friends yet</div>';
+                editBtn.style.display = 'none';
+                return;
+            }
+
+            editBtn.style.display = 'inline-block';
+
+            container.innerHTML = friends.map(email => `
+                <div class="friend-tag" id="friend-${email.replace(/[^a-zA-Z0-9]/g, '-')}" onclick="checkSpecificFriend('${email}')">
+                    <span class="friend-email-text">${email}</span>
+                    <span class="friend-seat-info" style="margin-left: 10px; font-size: 12px; opacity: 0.7;">
+                        <span class="loading" style="width: 12px; height: 12px; border-width: 2px;"></span>
+                    </span>
+                    <span class="friend-tag-remove" onclick="event.stopPropagation(); removeSavedFriend('${email}')">✕</span>
+                </div>
+            `).join('');
+        }
+
+        function toggleEditMode() {
+            const editBtn = document.getElementById('editFriendsBtn');
+            const friendTags = document.querySelectorAll('.friend-tag');
+            const isEditing = editBtn.classList.contains('editing');
+
+            if (isEditing) {
+                // Exit edit mode
+                editBtn.classList.remove('editing');
+                editBtn.innerHTML = '✏️ Edit';
+                friendTags.forEach(tag => {
+                    tag.classList.remove('edit-mode');
+                    tag.style.cursor = 'pointer';
+                });
+            } else {
+                // Enter edit mode
+                editBtn.classList.add('editing');
+                editBtn.innerHTML = '✓ Done';
+                friendTags.forEach(tag => {
+                    tag.classList.add('edit-mode');
+                    tag.style.cursor = 'default';
+                });
+            }
+        }
+
+        function saveFriend(email) {
+            const savedFriends = JSON.parse(localStorage.getItem('hotdesk_friends') || '[]');
+
+            if (!savedFriends.includes(email)) {
+                savedFriends.push(email);
+                localStorage.setItem('hotdesk_friends', JSON.stringify(savedFriends));
+                displaySavedFriends(savedFriends);
+                showStatus('friendsStatus', `✅ ${email} saved to friends list!`, 'success');
+
+                setTimeout(() => {
+                    document.getElementById('friendsStatus').style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        function removeSavedFriend(email) {
+            if (confirm(`Remove ${email} from your friends list?`)) {
+                const savedFriends = JSON.parse(localStorage.getItem('hotdesk_friends') || '[]');
+                const filtered = savedFriends.filter(e => e !== email);
+                localStorage.setItem('hotdesk_friends', JSON.stringify(filtered));
+                displaySavedFriends(filtered);
+                
+                // Exit edit mode if no friends left
+                if (filtered.length === 0) {
+                    const editBtn = document.getElementById('editFriendsBtn');
+                    editBtn.classList.remove('editing');
+                    editBtn.innerHTML = '✏️ Edit';
+                }
+            }
+        }
+
+        function checkSpecificFriend(email) {
+            // Only check friend if not in edit mode
+            const editBtn = document.getElementById('editFriendsBtn');
+            if (editBtn.classList.contains('editing')) {
+                return;
+            }
+
+            document.getElementById('friendEmail').value = email;
+            checkFriendSeat();
+        }
+
+        async function checkAllSavedFriends() {
+            const savedFriends = JSON.parse(localStorage.getItem('hotdesk_friends') || '[]');
+
+            if (savedFriends.length === 0) return;
+
+            const validation = validateUserCredentials();
+            if (!validation.data.cookie) return;
+
+            try {
+                // Get today's date in the format MM/DD/YYYY 12:00:00 AM
+                const today = new Date();
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const day = String(today.getDate()).padStart(2, '0');
+                const year = today.getFullYear();
+                const dateKey = `${month}/${day}/${year} 12:00:00 AM`;
+
+                const payload = {
+                    [dateKey]: dateKey
+                };
+
+                const response = await fetch(`${API_BASE}/CreateBooking/GetAvailableSeatListMultiDate_DesignChangeNew/?locationId=11&sublocationId=26&floorId=4&zoneId=Open%20Space&starttime=08:00AM&endtime=06:00PM`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Cookie': validation.data.cookie,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const result = await response.text();
+
+                let parsedData;
+                try {
+                    const firstParse = JSON.parse(result);
+                    parsedData = typeof firstParse === 'string' ? JSON.parse(firstParse) : firstParse;
+                } catch (e) {
+                    throw new Error('Failed to parse API response');
+                }
+
+                if (!parsedData.AvailableSeats || !Array.isArray(parsedData.AvailableSeats)) {
+                    throw new Error('Invalid API response format');
+                }
+
+                // Update each friend's seat info
+                savedFriends.forEach(email => {
+                    const emailLower = email.toLowerCase();
+                    let foundSeat = null;
+
+                    for (const seat of parsedData.AvailableSeats) {
+                        if (seat.BOOKINGDETAILS && Array.isArray(seat.BOOKINGDETAILS)) {
+                            for (const booking of seat.BOOKINGDETAILS) {
+                                if (booking.EMAIL_ID && booking.EMAIL_ID.toLowerCase() === emailLower) {
+                                    foundSeat = {
+                                        seatName: seat.SEAT_NAME,
+                                        fromTime: booking.FROM_DT,
+                                        toTime: booking.TO_DT
+                                    };
+                                    break;
+                                }
+                            }
+                        }
+                        if (foundSeat) break;
+                    }
+
+                    updateFriendTagWithSeatInfo(email, foundSeat);
+                });
+
+            } catch (error) {
+                console.error('Error checking saved friends:', error);
+            }
+        }
+
+        function updateFriendTagWithSeatInfo(email, seatInfo) {
+            const tagId = `friend-${email.replace(/[^a-zA-Z0-9]/g, '-')}`;
+            const friendTag = document.getElementById(tagId);
+
+            if (!friendTag) return;
+
+            const seatInfoSpan = friendTag.querySelector('.friend-seat-info');
+
+            if (seatInfo) {
+                const fromTime = new Date(seatInfo.fromTime).toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                const toTime = new Date(seatInfo.toTime).toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                seatInfoSpan.innerHTML = `🪑 Seat ${seatInfo.seatName}`;
+                seatInfoSpan.style.opacity = '1';
+                seatInfoSpan.style.fontWeight = 'bold';
+                seatInfoSpan.title = `${fromTime} - ${toTime}`;
+                friendTag.style.background = '#d4edda';
+                friendTag.style.borderColor = '#28a745';
+            } else {
+                seatInfoSpan.innerHTML = '❌ No seat';
+                seatInfoSpan.style.opacity = '0.7';
+                seatInfoSpan.title = 'No reservation for today';
+                friendTag.style.background = '#f8d7da';
+                friendTag.style.borderColor = '#dc3545';
+            }
+        }
+
+        function checkSpecificFriend(email) {
+            document.getElementById('friendEmail').value = email;
+            checkFriendSeat();
+        }
+
+        async function checkFriendSeat() {
+            const emailInput = document.getElementById('friendEmail').value.trim();
+
+            if (!emailInput) {
+                alert('Please enter an email address');
+                return;
+            }
+
+            // Convert to lowercase as specified
+            const email = emailInput.toLowerCase();
+            document.getElementById('friendEmail').value = email;
+
+            const validation = validateUserCredentials();
+            if (!validation.data.cookie) {
+                alert('Cookie is required to check seats. Please fill in your configuration first.');
+                return;
+            }
+
+            showStatus('friendsStatus', 'Checking seat availability...', 'loading');
+
+            try {
+                // Get today's date in the format MM/DD/YYYY 12:00:00 AM
+                const today = new Date();
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const day = String(today.getDate()).padStart(2, '0');
+                const year = today.getFullYear();
+                const dateKey = `${month}/${day}/${year} 12:00:00 AM`;
+
+                const payload = {
+                    [dateKey]: dateKey
+                };
+
+                const response = await fetch(`${API_BASE}/CreateBooking/GetAvailableSeatListMultiDate_DesignChangeNew/?locationId=11&sublocationId=26&floorId=4&zoneId=Open%20Space&starttime=08:00AM&endtime=06:00PM`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Cookie': validation.data.cookie,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const result = await response.text();
+
+                // Parse the response (it may be double-encoded JSON)
+                let parsedData;
+                try {
+                    const firstParse = JSON.parse(result);
+                    parsedData = typeof firstParse === 'string' ? JSON.parse(firstParse) : firstParse;
+                } catch (e) {
+                    throw new Error('Failed to parse API response');
+                }
+
+                if (!parsedData.AvailableSeats || !Array.isArray(parsedData.AvailableSeats)) {
+                    throw new Error('Invalid API response format');
+                }
+
+                // Search for the email in booking details
+                let foundSeat = null;
+
+                for (const seat of parsedData.AvailableSeats) {
+                    if (seat.BOOKINGDETAILS && Array.isArray(seat.BOOKINGDETAILS)) {
+                        for (const booking of seat.BOOKINGDETAILS) {
+                            if (booking.EMAIL_ID && booking.EMAIL_ID.toLowerCase() === email) {
+                                foundSeat = {
+                                    seatName: seat.SEAT_NAME,
+                                    seatId: seat.SEAT_ID,
+                                    fromTime: booking.FROM_DT,
+                                    toTime: booking.TO_DT,
+                                    bookingReference: booking.BOOKING_REFERENCE
+                                };
+                                break;
+                            }
+                        }
+                    }
+                    if (foundSeat) break;
+                }
+
+                displayFriendResult(email, foundSeat);
+
+            } catch (error) {
+                showStatus('friendsStatus', `Error checking seat: ${error.message}`, 'error');
+                console.error('Error checking friend seat:', error);
+            }
+        }
+
+        function displayFriendResult(email, seatInfo) {
+            const resultsContainer = document.getElementById('friendsResults');
+            const savedFriends = JSON.parse(localStorage.getItem('hotdesk_friends') || '[]');
+            const isSaved = savedFriends.includes(email);
+
+            let resultHTML = '';
+
+            if (seatInfo) {
+                // Friend has a reservation
+                const fromTime = new Date(seatInfo.fromTime).toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                const toTime = new Date(seatInfo.toTime).toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                resultHTML = `
+                    <div class="friend-result reserved">
+                        <div class="friend-info">
+                            <div class="friend-email">✅ ${email}</div>
+                            <div class="friend-seat">
+                                <strong>Seat ${seatInfo.seatName}</strong> 
+                                (${fromTime} - ${toTime})
+                            </div>
+                        </div>
+                        <div class="friend-actions">
+                            ${!isSaved ? `<button class="btn-save-friend" onclick="saveFriend('${email}')">💾 Save Friend</button>` : ''}
+                        </div>
+                    </div>
+                `;
+
+                // No status message needed - info is in the result box
+            } else {
+                // Friend does not have a reservation
+                resultHTML = `
+                    <div class="friend-result not-reserved">
+                        <div class="friend-info">
+                            <div class="friend-email">❌ ${email}</div>
+                            <div class="friend-seat">No seat reserved for today</div>
+                        </div>
+                        <div class="friend-actions">
+                            ${!isSaved ? `<button class="btn-save-friend" onclick="saveFriend('${email}')">💾 Save Friend</button>` : ''}
+                        </div>
+                    </div>
+                `;
+                // No status message needed - info is in the result box
+            }
+
+            resultsContainer.innerHTML = resultHTML;
+
+            // Hide any previous status messages
+            document.getElementById('friendsStatus').style.display = 'none';
+        }
+
     </script>
 </body>
 
