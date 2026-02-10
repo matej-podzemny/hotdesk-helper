@@ -41,11 +41,6 @@
             margin-bottom: 10px;
         }
 
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-
         .version-info {
             position: absolute;
             top: 10px;
@@ -73,11 +68,6 @@
             z-index: 1000;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             display: none;
-        }
-
-        .update-notification a {
-            color: white;
-            text-decoration: underline;
         }
 
         .main-content {
@@ -120,6 +110,7 @@
         label {
             display: block;
             margin-bottom: 8px;
+            margin-top: 8px;
             font-weight: 600;
             color: #555;
         }
@@ -322,19 +313,6 @@
             border-color: #000000;
         }
 
-        .weekday-checkbox input {
-            margin-right: 8px;
-            width: auto;
-        }
-
-        .week-selection-controls {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
         .action-buttons {
             display: flex;
             gap: 15px;
@@ -492,32 +470,19 @@
             gap: 10px;
         }
 
-        .btn-save-friend,
-        .btn-remove-friend {
+        .btn-save-friend {
             padding: 8px 16px;
             font-size: 14px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             transition: all 0.3s ease;
-        }
-
-        .btn-save-friend {
             background: #28a745;
             color: white;
         }
 
         .btn-save-friend:hover {
             background: #218838;
-        }
-
-        .btn-remove-friend {
-            background: #dc3545;
-            color: white;
-        }
-
-        .btn-remove-friend:hover {
-            background: #c82333;
         }
 
         .saved-friends {
@@ -675,6 +640,246 @@
             filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
         }
 
+        /* Booking Display Styles */
+        .bookings-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .booking-section {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .booking-section-title {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: #FFDE00;
+            padding: 15px 20px;
+            margin: 0;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .booking-list {
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .booking-item {
+            background: #fffde6;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+            border-left: 4px solid #FFDE00;
+        }
+
+        .booking-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .booking-item.today {
+            border-left-color: #000000;
+            background: linear-gradient(135deg, #fffacd 0%, #fff8b3 100%);
+        }
+
+        .booking-date {
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .booking-date .date-icon {
+            margin-right: 8px;
+            font-size: 1.2em;
+        }
+
+        .booking-details {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .booking-details .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+
+        .booking-location {
+            background: #e3f2fd;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            margin-top: 8px;
+            color: #1565c0;
+        }
+
+        .no-bookings {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            padding: 40px 20px;
+            background: #fafafa;
+            border-radius: 8px;
+            border: 2px dashed #ddd;
+        }
+
+        .booking-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+            gap: 8px;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-delete:hover {
+            background: #c82333;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+        }
+
+        .btn-delete:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .deleting {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .booking-selection {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .booking-checkbox {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .select-all-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background: #e3f2fd;
+            border-bottom: 1px solid #bbdefb;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .select-all-container label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+        }
+
+        .select-all-checkbox {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .inline-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .selected-count {
+            font-size: 14px;
+            color: #e65100;
+            font-weight: 600;
+        }
+
+        .btn-bulk-delete {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-bulk-delete:hover {
+            background: #d32f2f;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3);
+        }
+
+        .btn-bulk-delete:disabled {
+            background: #9e9e9e;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .booking-item.selected {
+            border-left-color: #ff5722;
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+        }
+
+        .booking-item.for-someone {
+            border-left-color: #9C27B0;
+            background: linear-gradient(135deg, #e0b8e7 0%, #f3e5f5 100%);
+        }
+
+        .booking-item.history {
+            border-left-color: #6c757d;
+            background: linear-gradient(135deg, #eeecec 0%, #f8f9fa 100%);
+            opacity: 0.8;
+        }
+
+        .for-someone-label {
+            background: #9C27B0;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-left: 10px;
+            font-weight: normal;
+        }
+
         @media screen and (max-width: 768px) {
             .truck {
                 width: 250px;
@@ -801,8 +1006,7 @@
                 flex-direction: column;
             }
 
-            .btn-save-friend,
-            .btn-remove-friend {
+            .btn-save-friend {
                 width: 100%;
             }
 
@@ -881,6 +1085,424 @@
             }
         }
 
+        /* Team Tracker Styles */
+        .group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .group-header h3 {
+            margin-bottom: 0;
+        }
+
+        .group-header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .group-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .group-tab {
+            padding: 8px 18px;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: white;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .group-tab:hover {
+            border-color: #FFDE00;
+            background: #fffacd;
+        }
+
+        .group-tab.active {
+            background: #FFDE00;
+            color: #000;
+            border-color: #000;
+        }
+
+        .group-tab .tab-count {
+            background: rgba(0,0,0,0.15);
+            padding: 1px 7px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+
+        .group-tab.active .tab-count {
+            background: rgba(0,0,0,0.25);
+        }
+
+        .group-tab .tab-delete {
+            margin-left: 4px;
+            color: #999;
+            font-size: 16px;
+            line-height: 1;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .group-tab .tab-delete:hover {
+            color: #dc3545;
+        }
+
+        .group-panel {
+            display: none;
+        }
+
+        .group-panel.active {
+            display: block;
+        }
+
+        .group-member-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .group-member-input input {
+            flex: 1;
+        }
+
+        .group-members-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 15px;
+            min-height: 40px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px dashed #ddd;
+        }
+
+        .group-members-list:empty::before {
+            content: 'No members yet. Add emails above.';
+            color: #999;
+            font-style: italic;
+        }
+
+        .member-chip {
+            display: inline-flex;
+            align-items: center;
+            background: #FFDE00;
+            color: #000;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 13px;
+            border: 1px solid #000;
+            gap: 6px;
+        }
+
+        .member-chip .remove-member {
+            cursor: pointer;
+            color: #666;
+            font-weight: bold;
+            font-size: 14px;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .member-chip .remove-member:hover {
+            color: #dc3545;
+        }
+
+        .team-date-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .team-quick-btns {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .team-quick-btn {
+            padding: 8px 14px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: white;
+            color: #555;
+        }
+
+        .team-quick-btn:hover {
+            border-color: #FFDE00;
+            background: #fffacd;
+        }
+
+        .team-quick-btn.active {
+            background: #FFDE00;
+            color: #000;
+            border-color: #000;
+        }
+
+        .team-custom-range {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .team-custom-range input[type="date"] {
+            width: auto;
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+
+        .team-grid-wrapper {
+            overflow-x: auto;
+            margin-top: 20px;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .team-grid {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 500px;
+        }
+
+        .team-grid th {
+            background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+            color: #FFDE00;
+            padding: 12px 15px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .team-grid th:first-child {
+            text-align: left;
+            min-width: 180px;
+            position: sticky;
+            left: 0;
+            z-index: 2;
+        }
+
+        .team-grid td {
+            padding: 10px 12px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            font-size: 13px;
+            transition: background-color 0.2s;
+        }
+
+        .team-grid td:first-child {
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            background: #fafafa;
+            white-space: nowrap;
+            position: sticky;
+            left: 0;
+            z-index: 1;
+        }
+
+        .team-grid tr:hover td {
+            background-color: #fffde6;
+        }
+
+        .team-grid tr:hover td:first-child {
+            background: #fff8cc;
+        }
+
+        .team-cell-booked {
+            background: #d4edda !important;
+            color: #155724;
+            font-weight: 600;
+        }
+
+        .team-cell-not-booked {
+            background: #f8d7da !important;
+            color: #999;
+        }
+
+        .team-summary {
+            margin-top: 15px;
+            padding: 12px 15px;
+            background: #e3f2fd;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #1565c0;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .team-summary-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .team-summary-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .team-summary-dot.booked {
+            background: #28a745;
+        }
+
+        .team-summary-dot.not-booked {
+            background: #dc3545;
+        }
+
+        .create-group-inline {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .create-group-inline input {
+            width: 200px;
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+
+        .btn-create-group {
+            padding: 8px 14px;
+            border: 2px solid #28a745;
+            border-radius: 8px;
+            background: #28a745;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .btn-create-group:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+
+        .btn-import-friends {
+            padding: 8px 14px;
+            border: 2px solid #17a2b8;
+            border-radius: 8px;
+            background: #17a2b8;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .btn-import-friends:hover {
+            background: #138496;
+            transform: translateY(-1px);
+        }
+
+        .team-no-data {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+            font-style: italic;
+            background: #fafafa;
+            border-radius: 8px;
+            border: 2px dashed #ddd;
+            margin-top: 15px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .group-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .group-header-actions {
+                width: 100%;
+            }
+
+            .group-tabs {
+                gap: 6px;
+            }
+
+            .group-tab {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+
+            .group-member-input {
+                flex-direction: column;
+            }
+
+            .team-date-controls {
+                flex-direction: column;
+            }
+
+            .team-custom-range {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .team-custom-range input[type="date"] {
+                width: 100%;
+            }
+
+            .create-group-inline {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .create-group-inline input {
+                width: 100%;
+            }
+
+            .team-quick-btns {
+                width: 100%;
+            }
+
+            .team-quick-btn {
+                flex: 1;
+                text-align: center;
+            }
+
+            .team-summary {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .member-chip {
+                font-size: 12px;
+            }
+        }
+
         .footer {
             background: #000000;
             color: #FFDE00;
@@ -894,269 +1516,6 @@
             color: #FFDE00;
             font-size: 16px;
             margin: 0 5px;
-        }
-
-        /* Booking Display Styles */
-        .bookings-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-top: 20px;
-        }
-
-        .booking-section {
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            overflow: hidden;
-            background: white;
-        }
-
-        .booking-section-title {
-            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
-            color: #FFDE00;
-            padding: 15px 20px;
-            margin: 0;
-            font-size: 1.2em;
-            font-weight: 600;
-        }
-
-        .booking-list {
-            padding: 15px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .booking-item {
-            background: #fffde6;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 12px;
-            transition: all 0.3s ease;
-            border-left: 4px solid #FFDE00;
-        }
-
-        .booking-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .booking-item.today {
-            border-left-color: #000000;
-            background: linear-gradient(135deg, #fffacd 0%, #fff8b3 100%);
-        }
-
-        .booking-date {
-            font-weight: bold;
-            color: #333;
-            font-size: 1.1em;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-        }
-
-        .booking-date .date-icon {
-            margin-right: 8px;
-            font-size: 1.2em;
-        }
-
-        .booking-details {
-            color: #666;
-            font-size: 0.9em;
-            line-height: 1.4;
-        }
-
-        .booking-details .detail-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 4px;
-        }
-
-        .booking-location {
-            background: #e3f2fd;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.8em;
-            margin-top: 8px;
-            color: #1565c0;
-        }
-
-        .booking-reference {
-            font-family: monospace;
-            background: #f5f5f5;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-size: 0.8em;
-            color: #666;
-        }
-
-        .no-bookings {
-            text-align: center;
-            color: #999;
-            font-style: italic;
-            padding: 40px 20px;
-            background: #fafafa;
-            border-radius: 8px;
-            border: 2px dashed #ddd;
-        }
-
-        .booking-actions {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 10px;
-            gap: 8px;
-        }
-
-        .btn-delete {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-delete:hover {
-            background: #c82333;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
-        }
-
-        .btn-delete:disabled {
-            background: #6c757d;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .deleting {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
-        .booking-selection {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 10px;
-            padding: 8px;
-            background: #f8f9fa;
-            border-radius: 4px;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .booking-checkbox {
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-        }
-
-        .select-all-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 15px;
-            background: #e3f2fd;
-            border-bottom: 1px solid #bbdefb;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .select-all-container label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin: 0;
-        }
-
-        .select-all-checkbox {
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-        }
-
-        .inline-actions {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .bulk-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 15px;
-            background: #fff3e0;
-            border-top: 1px solid #ffcc02;
-            gap: 10px;
-        }
-
-        .bulk-actions.hidden {
-            display: none;
-        }
-
-        .selected-count {
-            font-size: 14px;
-            color: #e65100;
-            font-weight: 600;
-        }
-
-        .btn-bulk-delete {
-            background: #f44336;
-            color: white;
-            border: none;
-            padding: 4px 8px;
-            border-radius: 3px;
-            font-size: 11px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-        }
-
-        .btn-bulk-delete:hover {
-            background: #d32f2f;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3);
-        }
-
-        .btn-bulk-delete:disabled {
-            background: #9e9e9e;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .booking-item.selected {
-            border-left-color: #ff5722;
-            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
-        }
-
-        .booking-item.for-someone {
-            border-left-color: #9C27B0;
-            background: linear-gradient(135deg, #e0b8e7 0%, #f3e5f5 100%);
-        }
-
-        .booking-item.history {
-            border-left-color: #6c757d;
-            background: linear-gradient(135deg, #eeecec 0%, #f8f9fa 100%);
-            opacity: 0.8;
-        }
-
-        .for-someone-label {
-            background: #9C27B0;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.8em;
-            margin-left: 10px;
-            font-weight: normal;
         }
 
         @media (max-width: 768px) {
@@ -1258,11 +1617,6 @@
                 display: block;
             }
 
-            .bookings-container {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-
             .booking-section-title {
                 padding: 12px 15px;
                 font-size: 1em;
@@ -1301,12 +1655,6 @@
             .inline-actions {
                 width: 100%;
                 justify-content: space-between;
-            }
-
-            .bulk-actions {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
             }
 
             .selected-dates h4 {
@@ -1393,7 +1741,7 @@
                 <div id="currentVersion">v1</div>
                 <div class="version-check" id="versionCheck">Checking for updates...</div>
             </div>
-            <h1>🏢 Hotdesk Reservation System</h1>
+            <h1>Hotdesk Reservation System</h1>
         </div>
 
         <!-- Update notification -->
@@ -1406,7 +1754,7 @@
         <div class="main-content">
             <!-- Friends Checker Section -->
             <div class="step" id="friendsChecker">
-                <h3><span class="step-number">👥</span>Friends Checker</h3>
+                <h3>Friends Checker</h3>
 
                 <div class="saved-friends" id="savedFriendsList">
                     <h4>
@@ -1429,9 +1777,61 @@
                 <div id="friendsStatus" class="status-message"></div>
             </div>
 
+            <!-- Team Tracker Section -->
+            <div class="step" id="teamTracker">
+                <div class="group-header">
+                    <h3>Team Tracker</h3>
+                    <div class="group-header-actions">
+                        <button class="btn-import-friends" onclick="importFriendsToGroup()" title="Create a group from your saved friends list">📥 Import Friends</button>
+                    </div>
+                </div>
+
+                <!-- Create Group -->
+                <div class="create-group-inline" id="createGroupForm">
+                    <input type="text" id="newGroupName" placeholder="Enter group name..." maxlength="30"
+                        onkeydown="if(event.key==='Enter') createGroup()">
+                    <button class="btn-create-group" onclick="createGroup()">+ Create Group</button>
+                </div>
+
+                <!-- Group Tabs -->
+                <div class="group-tabs" id="groupTabs">
+                    <div style="color: #999; font-style: italic; padding: 8px;">No groups yet. Create one above.</div>
+                </div>
+
+                <!-- Group Panel (per-group content) -->
+                <div id="groupPanels"></div>
+
+                <!-- Date Range Controls -->
+                <div id="teamDateSection" style="display: none;">
+                    <label style="font-weight: 600; color: #555; margin-bottom: 8px; display: block;">Select Date Range:</label>
+                    <div class="team-date-controls">
+                        <div class="team-quick-btns">
+                            <button class="team-quick-btn active" data-range="today" onclick="setTeamDateRange('today')">Today</button>
+                            <button class="team-quick-btn" data-range="thisWeek" onclick="setTeamDateRange('thisWeek')">This Week</button>
+                            <button class="team-quick-btn" data-range="nextWeek" onclick="setTeamDateRange('nextWeek')">Next Week</button>
+                            <button class="team-quick-btn" data-range="custom" onclick="setTeamDateRange('custom')">Custom</button>
+                        </div>
+                        <div class="team-custom-range" id="teamCustomRange" style="display: none;">
+                            <input type="date" id="teamStartDate">
+                            <span>to</span>
+                            <input type="date" id="teamEndDate">
+                        </div>
+                    </div>
+
+                    <div class="action-buttons" style="margin-top: 15px;">
+                        <button class="btn btn-primary" onclick="checkTeamStatus()">🔍 Check Team Status</button>
+                    </div>
+                </div>
+
+                <!-- Results Grid -->
+                <div id="teamResults"></div>
+
+                <div id="teamStatus" class="status-message"></div>
+            </div>
+
             <!-- Step 0: Current Bookings -->
             <div class="step" id="bookingsDisplay">
-                <h3><span class="step-number">📅</span>My Bookings</h3>
+                <h3>My Bookings</h3>
 
                 <div class="bookings-container">
                     <div class="booking-section">
@@ -1632,7 +2032,7 @@
         // Set second calendar to next month
         currentMonth2.setMonth(currentMonth2.getMonth() + 1);
 
-        const CURRENT_VERSION = 'v3';
+        const CURRENT_VERSION = 'v4';
         const API_BASE = '/proxy';
 
         // Easter Egg - Key sequence detection
@@ -1783,6 +2183,7 @@
             setupAutoSave();
             checkVersion();
             loadSavedFriends();
+            loadGroups();
 
             setTimeout(() => {
                 const validation = validateUserCredentials();
@@ -2961,8 +3362,7 @@
             displaySavedFriends(savedFriends);
 
             setTimeout(() => {
-                const validation = validateUserCredentials();
-                if (validation.data.cookie && savedFriends.length > 0) {
+                if (savedFriends.length > 0) {
                     checkAllSavedFriends();
                 }
             }, 1000);
@@ -2975,6 +3375,8 @@
             if (friends.length === 0) {
                 container.innerHTML = '<div style="color: #999; font-style: italic;">No saved friends yet</div>';
                 editBtn.style.display = 'none';
+                editBtn.classList.remove('editing');
+                editBtn.innerHTML = '✏️ Edit';
                 return;
             }
 
@@ -2989,6 +3391,14 @@
                     <span class="friend-tag-remove" onclick="event.stopPropagation(); removeSavedFriend('${email}')">✕</span>
                 </div>
             `).join('');
+
+            if (editBtn.classList.contains('editing')) {
+                const friendTags = document.querySelectorAll('.friend-tag');
+                friendTags.forEach(tag => {
+                    tag.classList.add('edit-mode');
+                    tag.style.cursor = 'default';
+                });
+            }
         }
 
         function toggleEditMode() {
@@ -3167,11 +3577,6 @@
             }
         }
 
-        function checkSpecificFriend(email) {
-            document.getElementById('friendEmail').value = email;
-            checkFriendSeat();
-        }
-
         async function checkFriendSeat() {
             const emailInput = document.getElementById('friendEmail').value.trim();
 
@@ -3316,6 +3721,438 @@
 
             // Hide any previous status messages
             document.getElementById('friendsStatus').style.display = 'none';
+        }
+
+        // ===========================
+        // Team Tracker Functionality
+        // ===========================
+
+        let groups = [];
+        let activeGroupIndex = -1;
+        let teamDateRange = 'today';
+
+        function loadGroups() {
+            groups = JSON.parse(localStorage.getItem('hotdesk_groups') || '[]');
+            renderGroupTabs();
+            if (groups.length > 0) {
+                selectGroup(0);
+            }
+            updateTeamDateInputs();
+        }
+
+        function saveGroups() {
+            localStorage.setItem('hotdesk_groups', JSON.stringify(groups));
+        }
+
+        function createGroup() {
+            const nameInput = document.getElementById('newGroupName');
+            const name = nameInput.value.trim();
+            if (!name) {
+                alert('Please enter a group name');
+                return;
+            }
+            if (groups.some(g => g.name.toLowerCase() === name.toLowerCase())) {
+                alert('A group with this name already exists');
+                return;
+            }
+            groups.push({ name: name, members: [] });
+            saveGroups();
+            nameInput.value = '';
+            renderGroupTabs();
+            selectGroup(groups.length - 1);
+        }
+
+        function deleteGroup(index) {
+            if (!confirm(`Delete group "${groups[index].name}"?`)) return;
+            groups.splice(index, 1);
+            saveGroups();
+            if (activeGroupIndex >= groups.length) {
+                activeGroupIndex = groups.length - 1;
+            }
+            renderGroupTabs();
+            if (groups.length > 0) {
+                selectGroup(Math.max(0, activeGroupIndex));
+            } else {
+                activeGroupIndex = -1;
+                document.getElementById('groupPanels').innerHTML = '';
+                document.getElementById('teamDateSection').style.display = 'none';
+                document.getElementById('teamResults').innerHTML = '';
+            }
+        }
+
+        function selectGroup(index) {
+            activeGroupIndex = index;
+            renderGroupTabs();
+            renderGroupPanel(index);
+            document.getElementById('teamDateSection').style.display = 'block';
+            document.getElementById('teamResults').innerHTML = '';
+        }
+
+        function renderGroupTabs() {
+            const container = document.getElementById('groupTabs');
+            if (groups.length === 0) {
+                container.innerHTML = '<div style="color: #999; font-style: italic; padding: 8px;">No groups yet. Create one above.</div>';
+                return;
+            }
+            container.innerHTML = groups.map((group, i) => `
+                <div class="group-tab ${i === activeGroupIndex ? 'active' : ''}" onclick="selectGroup(${i})">
+                    ${group.name}
+                    <span class="tab-count">${group.members.length}</span>
+                    <span class="tab-delete" onclick="event.stopPropagation(); deleteGroup(${i})" title="Delete group">✕</span>
+                </div>
+            `).join('');
+        }
+
+        function renderGroupPanel(index) {
+            const group = groups[index];
+            const panelContainer = document.getElementById('groupPanels');
+
+            const membersHTML = group.members.map(email => `
+                <span class="member-chip">
+                    ${email}
+                    <span class="remove-member" onclick="removeMemberFromGroup('${email}')" title="Remove">✕</span>
+                </span>
+            `).join('');
+
+            panelContainer.innerHTML = `
+                <div class="group-panel active">
+                    <div class="group-member-input">
+                        <input type="email" id="groupMemberEmail" placeholder="Add member email..."
+                            onkeydown="if(event.key==='Enter') addMemberToGroup()">
+                        <button class="btn btn-primary btn-small" onclick="addMemberToGroup()">+ Add</button>
+                    </div>
+                    <div class="group-members-list" id="groupMembersList">
+                        ${membersHTML || ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function addMemberToGroup() {
+            if (activeGroupIndex < 0) return;
+            const input = document.getElementById('groupMemberEmail');
+            const email = input.value.trim().toLowerCase();
+            if (!email) return;
+            if (!isValidEmail(email)) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            const group = groups[activeGroupIndex];
+            if (group.members.includes(email)) {
+                alert('This member is already in the group');
+                return;
+            }
+            group.members.push(email);
+            saveGroups();
+            input.value = '';
+            renderGroupPanel(activeGroupIndex);
+            renderGroupTabs();
+        }
+
+        function removeMemberFromGroup(email) {
+            if (activeGroupIndex < 0) return;
+            const group = groups[activeGroupIndex];
+            group.members = group.members.filter(m => m !== email);
+            saveGroups();
+            renderGroupPanel(activeGroupIndex);
+            renderGroupTabs();
+        }
+
+        function importFriendsToGroup() {
+            const savedFriends = JSON.parse(localStorage.getItem('hotdesk_friends') || '[]');
+            if (savedFriends.length === 0) {
+                alert('No saved friends to import. Add friends in the Friends Checker section first.');
+                return;
+            }
+
+            const groupName = prompt('Enter a name for the new group:', 'My Friends');
+            if (!groupName || !groupName.trim()) return;
+
+            const name = groupName.trim();
+            if (groups.some(g => g.name.toLowerCase() === name.toLowerCase())) {
+                // Add to existing group
+                const existingIndex = groups.findIndex(g => g.name.toLowerCase() === name.toLowerCase());
+                let added = 0;
+                savedFriends.forEach(email => {
+                    if (!groups[existingIndex].members.includes(email.toLowerCase())) {
+                        groups[existingIndex].members.push(email.toLowerCase());
+                        added++;
+                    }
+                });
+                saveGroups();
+                selectGroup(existingIndex);
+                alert(`Added ${added} new members to "${groups[existingIndex].name}"`);
+            } else {
+                groups.push({
+                    name: name,
+                    members: savedFriends.map(e => e.toLowerCase())
+                });
+                saveGroups();
+                renderGroupTabs();
+                selectGroup(groups.length - 1);
+                alert(`Created group "${name}" with ${savedFriends.length} members`);
+            }
+        }
+
+        function setTeamDateRange(range) {
+            teamDateRange = range;
+
+            // Update active button
+            document.querySelectorAll('.team-quick-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.range === range);
+            });
+
+            // Show/hide custom range inputs
+            document.getElementById('teamCustomRange').style.display = range === 'custom' ? 'flex' : 'none';
+
+            updateTeamDateInputs();
+        }
+
+        function updateTeamDateInputs() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const startInput = document.getElementById('teamStartDate');
+            const endInput = document.getElementById('teamEndDate');
+
+            if (!startInput || !endInput) return;
+
+            const todayStr = today.toISOString().split('T')[0];
+            startInput.min = todayStr;
+            endInput.min = todayStr;
+
+            if (teamDateRange !== 'custom') {
+                const dates = getTeamDates();
+                if (dates.length > 0) {
+                    startInput.value = dates[0];
+                    endInput.value = dates[dates.length - 1];
+                }
+            }
+        }
+
+        function getTeamDates() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const dates = [];
+
+            if (teamDateRange === 'today') {
+                if (today.getDay() !== 0 && today.getDay() !== 6) {
+                    dates.push(formatDateISO(today));
+                }
+            } else if (teamDateRange === 'thisWeek') {
+                const dayOfWeek = today.getDay();
+                // Monday of this week
+                const monday = new Date(today);
+                monday.setDate(today.getDate() - ((dayOfWeek + 6) % 7));
+                for (let i = 0; i < 5; i++) {
+                    const d = new Date(monday);
+                    d.setDate(monday.getDate() + i);
+                    if (d >= today) {
+                        dates.push(formatDateISO(d));
+                    }
+                }
+            } else if (teamDateRange === 'nextWeek') {
+                const dayOfWeek = today.getDay();
+                const nextMonday = new Date(today);
+                nextMonday.setDate(today.getDate() + (8 - dayOfWeek) % 7);
+                if (nextMonday <= today) nextMonday.setDate(nextMonday.getDate() + 7);
+                for (let i = 0; i < 5; i++) {
+                    const d = new Date(nextMonday);
+                    d.setDate(nextMonday.getDate() + i);
+                    dates.push(formatDateISO(d));
+                }
+            } else if (teamDateRange === 'custom') {
+                const startVal = document.getElementById('teamStartDate').value;
+                const endVal = document.getElementById('teamEndDate').value;
+                if (startVal && endVal) {
+                    const start = new Date(startVal);
+                    const end = new Date(endVal);
+                    const current = new Date(start);
+                    while (current <= end) {
+                        const dow = current.getDay();
+                        if (dow !== 0 && dow !== 6 && current >= today) {
+                            dates.push(formatDateISO(current));
+                        }
+                        current.setDate(current.getDate() + 1);
+                    }
+                }
+            }
+            return dates;
+        }
+
+        function formatDateISO(date) {
+            return date.getFullYear() + '-' +
+                String(date.getMonth() + 1).padStart(2, '0') + '-' +
+                String(date.getDate()).padStart(2, '0');
+        }
+
+        async function checkTeamStatus() {
+            if (activeGroupIndex < 0) {
+                alert('Please select a group first');
+                return;
+            }
+
+            const group = groups[activeGroupIndex];
+            if (group.members.length === 0) {
+                alert('This group has no members. Add some emails first.');
+                return;
+            }
+
+            const validation = validateUserCredentials();
+            if (!validation.data.cookie) {
+                alert('Cookie is required. Please fill in your configuration first.');
+                return;
+            }
+
+            const dates = getTeamDates();
+            if (dates.length === 0) {
+                alert('No valid dates selected. Please choose a date range.');
+                return;
+            }
+
+            showStatus('teamStatus', 'Checking team booking status...', 'loading');
+
+            try {
+                // Build multi-date payload
+                const payload = {};
+                dates.forEach(dateStr => {
+                    const [year, month, day] = dateStr.split('-');
+                    const dateKey = `${month}/${day}/${year} 12:00:00 AM`;
+                    payload[dateKey] = dateKey;
+                });
+
+                const response = await fetch(`${API_BASE}/CreateBooking/GetAvailableSeatListMultiDate_DesignChangeNew/?locationId=11&sublocationId=26&floorId=4&zoneId=Open%20Space&starttime=08:00AM&endtime=06:00PM`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Cookie': validation.data.cookie,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const result = await response.text();
+                let parsedData;
+                try {
+                    const firstParse = JSON.parse(result);
+                    parsedData = typeof firstParse === 'string' ? JSON.parse(firstParse) : firstParse;
+                } catch (e) {
+                    throw new Error('Failed to parse API response');
+                }
+
+                if (!parsedData.AvailableSeats || !Array.isArray(parsedData.AvailableSeats)) {
+                    throw new Error('Invalid API response format');
+                }
+
+                // Build lookup: email -> [{date, seat, fromTime, toTime}]
+                const bookingMap = {};
+                group.members.forEach(email => {
+                    bookingMap[email] = {};
+                });
+
+                for (const seat of parsedData.AvailableSeats) {
+                    if (seat.BOOKINGDETAILS && Array.isArray(seat.BOOKINGDETAILS)) {
+                        for (const booking of seat.BOOKINGDETAILS) {
+                            if (booking.EMAIL_ID) {
+                                const emailLower = booking.EMAIL_ID.toLowerCase();
+                                if (bookingMap.hasOwnProperty(emailLower)) {
+                                    // Extract date from FROM_DT
+                                    const bookingDate = new Date(booking.FROM_DT);
+                                    const dateKey = formatDateISO(bookingDate);
+                                    bookingMap[emailLower][dateKey] = {
+                                        seatName: seat.SEAT_NAME,
+                                        fromTime: booking.FROM_DT,
+                                        toTime: booking.TO_DT
+                                    };
+                                }
+                            }
+                        }
+                    }
+                }
+
+                displayTeamGrid(group.members, dates, bookingMap);
+
+                document.getElementById('teamStatus').style.display = 'none';
+
+            } catch (error) {
+                showStatus('teamStatus', `Error checking team status: ${error.message}`, 'error');
+                console.error('Team status check failed:', error);
+            }
+        }
+
+        function displayTeamGrid(members, dates, bookingMap) {
+            const resultsContainer = document.getElementById('teamResults');
+
+            if (members.length === 0 || dates.length === 0) {
+                resultsContainer.innerHTML = '<div class="team-no-data">No data to display</div>';
+                return;
+            }
+
+            // Format date headers
+            const dateHeaders = dates.map(d => {
+                const date = new Date(d + 'T00:00:00');
+                const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+                const dayNum = date.getDate();
+                const month = date.toLocaleDateString('en-US', { month: 'short' });
+                return { key: d, label: `${dayName}<br>${dayNum} ${month}` };
+            });
+
+            // Count stats
+            let totalBooked = 0;
+            let totalSlots = members.length * dates.length;
+
+            // Build grid rows
+            const rows = members.map(email => {
+                const cells = dates.map(dateKey => {
+                    const booking = bookingMap[email] && bookingMap[email][dateKey];
+                    if (booking) {
+                        totalBooked++;
+                        const fromTime = new Date(booking.fromTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                        const toTime = new Date(booking.toTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                        return `<td class="team-cell-booked" title="${email}\nSeat ${booking.seatName}\n${fromTime} - ${toTime}">🪑 ${booking.seatName}</td>`;
+                    } else {
+                        return `<td class="team-cell-not-booked" title="${email} - No booking">—</td>`;
+                    }
+                }).join('');
+
+                // Abbreviate email for display
+                const displayName = email.split('@')[0];
+                return `<tr><td title="${email}">${displayName}</td>${cells}</tr>`;
+            }).join('');
+
+            const html = `
+                <div class="team-grid-wrapper">
+                    <table class="team-grid">
+                        <thead>
+                            <tr>
+                                <th>Member</th>
+                                ${dateHeaders.map(h => `<th>${h.label}</th>`).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rows}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="team-summary">
+                    <div class="team-summary-item">
+                        <span class="team-summary-dot booked"></span>
+                        <span><strong>${totalBooked}</strong> booked</span>
+                    </div>
+                    <div class="team-summary-item">
+                        <span class="team-summary-dot not-booked"></span>
+                        <span><strong>${totalSlots - totalBooked}</strong> not booked</span>
+                    </div>
+                    <div class="team-summary-item">
+                        <span>📊 ${Math.round((totalBooked / totalSlots) * 100)}% attendance</span>
+                    </div>
+                </div>
+            `;
+
+            resultsContainer.innerHTML = html;
         }
 
     </script>
